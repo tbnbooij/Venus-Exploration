@@ -48,7 +48,7 @@ boolean meassureUltrasound(){
     delay(7);
 
     // Make something that turns right after detecting on the left and vice versa!!
-      if(meassurement()<maxDistance){
+      if(meassurement()< maxDistance){
         return false;
       }
     }
