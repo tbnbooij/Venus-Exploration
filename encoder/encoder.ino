@@ -12,9 +12,9 @@ int lastLeftEncoderState = 0;
 int rightEncoderState = 0;
 int lastRightEncoderState = 0;
 
-int x = 0;
-int y = 0;
-int angle = 0;
+float x = 0;
+float y = 0;
+float angle = 0;
 
 void setup() {
   circumference = 2 * M_PI * radius;
@@ -24,10 +24,14 @@ void setup() {
 }
 
 void loop() {
-  readEncoder();
+  float encoderReading[2];
+  readEncoder(encoderReading);
+  
+  updateRelativePosition(encoderReading);
+  checkDistanceDriven();
 }
 
-void readEncoder() {
+void readEncoder(float a[]) {
   float leftDelta = 0.0;
   float rightDelta = 0.0;
   
@@ -48,8 +52,15 @@ void readEncoder() {
     }
   }
   lastRightEncoderState = rightEncoderState;
-
   
+  a[0] = leftDelta;
+  a[1] = rightDelta;
+}
+
+void updateRelativePosition(float reading[2]) {
+  float leftDelta = reading[0];
+  float rightDelta = reading[1];
+
   // leftDelta and rightDelta = distance that the left and right wheel have moved along
   //  the ground
   // https://robotics.stackexchange.com/questions/1653/calculate-position-of-differential-drive-robot
@@ -66,6 +77,7 @@ void readEncoder() {
   }
 }
 
+
 float boundAngle(float a) {
   if(a < 0) {
     a += 2*M_PI;
@@ -75,5 +87,16 @@ float boundAngle(float a) {
     a -=2* M_PI;
   }
   return a;
+}
+
+
+// REQUIRES: distance, xStart & yStart defined in motor control, as well as a function to stop the motor
+void checkDistanceDriven() {
+  if(distance > 0) { // set when starting driving
+    if( sqrt(pow(x-xStart, 2)+pow(y-yStart,2)) >= distance ) {
+      stopDriving(); // OR WHATEVER THE FUNCTION IS CALLED IN MOTOR CONTROL
+      distance = 0;
+    }
+  }
 }
 
