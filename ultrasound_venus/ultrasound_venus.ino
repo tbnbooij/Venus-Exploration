@@ -10,7 +10,7 @@ void loop() {
 
   servoUltrasound.attach(10);
   servoUltrasound.write(50);
-  delay(1000);
+  delay(100);
   for (int i=50; i<100; i=i+1){
   servoUltrasound.attach(10);
   servoUltrasound.write(i);
@@ -47,7 +47,6 @@ void meassurement(){
   duration = pulseIn(pingPin, HIGH);
 
   // convert the time into a distance
-  inches = microsecondsToInches(duration);
   cm = microsecondsToCentimeters(duration);
 
   Serial.print(cm);
@@ -56,15 +55,6 @@ void meassurement(){
 
   
   
-}
-
-long microsecondsToInches(long microseconds) {
-  // According to Parallax's datasheet for the PING))), there are
-  // 73.746 microseconds per inch (i.e. sound travels at 1130 feet per
-  // second).  This gives the distance travelled by the ping, outbound
-  // and return, so we divide by 2 to get the distance of the obstacle.
-  // See: http://www.parallax.com/dl/docs/prod/acc/28015-PING-v1.3.pdf
-  return microseconds / 74 / 2;
 }
 
 long microsecondsToCentimeters(long microseconds) {
