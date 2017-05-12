@@ -2,6 +2,7 @@
 #include <math.h>;
 
 const float radius = 1.0;
+const float unitsAxisWidth = 1.0;
 float circumference = 0;
 
 const int leftEncoder = 7;
