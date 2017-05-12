@@ -1,5 +1,4 @@
-// For the constant M.PI
-#include <math.h>;
+#include <math.h>
 
 const float radius = 1.0;
 const float unitsAxisWidth = 1.0;
@@ -18,7 +17,7 @@ int y = 0;
 int angle = 0;
 
 void setup() {
-  circumference = 2 * M.PI * radius;
+  circumference = 2 * M_PI * radius;
   Serial.begin(9600);
   pinMode(leftEncoder, INPUT);
   pinMode(rightEncoder, INPUT);
@@ -55,16 +54,26 @@ void readEncoder() {
   //  the ground
   // https://robotics.stackexchange.com/questions/1653/calculate-position-of-differential-drive-robot
   if (fabs(leftDelta - rightDelta) < 1.0e-6) { // basically going straight
-      new_x = x + leftDelta * cos(heading);
-      new_y = y + rightDelta * sin(heading);
-      new_heading = heading;
+      x = x + leftDelta * cos(angle);
+      y = y + rightDelta * sin(angle);
   } else {
       float R = unitsAxisWidth * (leftDelta + rightDelta) / (2 * (rightDelta - leftDelta)),
             wd = (rightDelta - leftDelta) / unitsAxisWidth;
   
-      new_x = x + R * sin(wd + heading) - R * sin(heading);
-      new_y = y - R * cos(wd + heading) + R * cos(heading);
-      new_heading = boundAngle(heading + wd);
+      x = x + R * sin(wd + angle) - R * sin(angle);
+      y = y - R * cos(wd + angle) + R * cos(angle);
+      angle = boundAngle(angle + wd);
   }
+}
+
+float boundAngle(float a) {
+  if(a < 0) {
+    a += 2*M_PI;
+  }
+
+  if(a > 2*M_PI) {
+    a -=2* M_PI;
+  }
+  return a;
 }
 
