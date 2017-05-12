@@ -10,18 +10,19 @@ float distance = 0;
 Servo servoUltrasound;
 int pingPin = 9;
 
+
 void setup() {
   Serial.begin(9600);
-  servoUltrasound.attach(10);
-  servoUltrasound.write(50);
-  delay(100);
+    servoUltrasound.attach(10);
+    servoUltrasound.write(50);
+    delay(100);
+    
 }
 
 void loop() {
   
-                      // Attach right signal to pin 12
-  float cm = meassureUltrasound();
-  if(cm>15){  
+  boolean drive = meassureUltrasound();
+  if(drive == true){  
     // Full speed forward
     servoLeft.attach(13);                      // Attach left signal to pin 13
     servoRight.attach(12); 
@@ -29,23 +30,25 @@ void loop() {
     servoRight.writeMicroseconds(1300);        // Right wheel clockwise
   }
   else {
-    servoLeft.detach();                        // Stop sending servo signals
-    servoRight.detach();                    // Empty, nothing needs repeating
+
+    servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
+    servoRight.writeMicroseconds(1700);
+    delay(400); 
   }
+  
 } 
 
-public float meassureUltrasound(){
+boolean meassureUltrasound(){
   
-    
-    for (int i=50; i<100; i=i+1){
-    
+    for (int i=50; i<100; i=i+1){    
     servoUltrasound.attach(10);
     servoUltrasound.write(i);
     delay(7);
-    i=i+1;
-    return meassurement();
+      if(meassurement()<20){
+        return false;
+      }
     }
-    
+    return true;
 }
 
 
