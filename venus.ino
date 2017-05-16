@@ -1,7 +1,7 @@
 #include <Encoder.h>
 
-//Encoder encoder(7,8);
-Encoder encoder(D6, D6);
+Encoder encoder(7,8);
+//Encoder encoder(D6, D6);
 
 void setup() {
 	Serial.begin(9600);
@@ -15,5 +15,4 @@ void loop() {
 
 	Serial.print("reading: ");
 	Serial.println(reading[0]);
-
 }
