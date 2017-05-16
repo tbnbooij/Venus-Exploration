@@ -18,9 +18,9 @@ class Encoder
 		float y;
 		float angle;
         
-        const float unitsAxisWidth = 1;
-        const float radius = 1;
-        float circumference;
+		const float unitsAxisWidth = 1;
+		const float radius = 1;
+		float circumference;
 
 		float boundAngle(float a);
 	public:
