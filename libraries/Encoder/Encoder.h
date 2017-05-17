@@ -28,11 +28,12 @@ class Encoder
         
 		void readEncoder(float a[]);
 		void updateRelativePosition(float reading[2]);
-		void checkDistanceDriven(float xStart, float yStart, float distance);
+		boolean checkDistanceDriven(float xStart, float yStart, float distance);
         
 		float getX();
 		float getY();
 		float getAngle();
+		int test();
 };
 
 #endif
