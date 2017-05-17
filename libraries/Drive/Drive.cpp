@@ -15,24 +15,23 @@ void Drive::setup() {
     delay(initialSetupUltrasoundServo);
 }
 
-
 String Drive::test() {
 	return "1";
 }
 
-boolean Drive::measureUltrasound(){
+int Drive::measureUltrasound(){
   
     for (int i=degreeRight; i<degreeLeft; i=i+1){    
-    servoUltrasound.attach(ultraSoundServo);
-    servoUltrasound.write(i);
-    delay(7);
+		servoUltrasound.attach(ultraSoundServo);
+		servoUltrasound.write(i);
+		delay(ultraServoDelay);
 
-    // Make something that turns right after detecting on the left and vice versa!!
-      if(measurement()< maxDistance){
-        return false;
-      }
+		// Make something that turns right after detecting on the left and vice versa!!
+		if(measurement()< maxDistance){
+			return i;
+		}
     }
-    return true;
+    return -1;
 }
 
 
@@ -59,13 +58,12 @@ float Drive::measurement(){
   duration = pulseIn(pingPin, HIGH);
 
   // convert the time into a distance
-  return microsecondsToCentimeters(duration);
-
-  Serial.print(cm);
+  
+  Serial.print(microsecondsToCentimeters(duration));
   Serial.print("cm");
   Serial.println();
 
-  
+  return microsecondsToCentimeters(duration);
   
 }
 
@@ -76,11 +74,17 @@ float Drive::microsecondsToCentimeters(float microseconds) {
   return microseconds / 29 / 2;
 }
 
-void Drive::turnAfterObstacle(){
+void Drive::turnAfterObstacle(int angle){
     servoLeft.attach(servoLeftPin);                     
     servoRight.attach(servoRightPin); 
-    servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
-    servoRight.writeMicroseconds(1700);
+    if (angle > 75 ){
+      servoLeft.writeMicroseconds(1700);         
+      servoRight.writeMicroseconds(1700);
+    }
+    if (angle <= 75 ){
+      servoLeft.writeMicroseconds(1300);         
+      servoRight.writeMicroseconds(1300);
+    }
     delay(turnTime);
     servoLeft.detach();
     servoRight.detach(); 
@@ -97,3 +101,4 @@ void Drive::stopDriving(){
     servoLeft.detach();
     servoRight.detach(); 
 }
+

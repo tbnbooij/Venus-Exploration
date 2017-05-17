@@ -23,15 +23,16 @@ class Drive
 		int servoRightPin;      		            // Pin for right servo wheel
 		int degreeRight = 20;	                    // Amount of degrees on the left side of the ultrasound sensor
 		int degreeLeft = 110;                       // Amount of degrees on the right side of the ultrasound sensor
+		int ultraServoDelay = 6;                    // Time the ultrasound servo needs to turn before meassuring can start again
 	public:
 		Drive(int a, int b, int c, int d);
 		void setup();
 		String test();
 		
-		boolean measureUltrasound();
+		int measureUltrasound();
 		float measurement();
 		float microsecondsToCentimeters(float microseconds);
-		void turnAfterObstacle();
+		void turnAfterObstacle(int angle);
 		void startDriving();
 		void stopDriving();
 };
