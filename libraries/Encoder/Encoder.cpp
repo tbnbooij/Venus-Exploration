@@ -84,6 +84,6 @@ float Encoder::getAngle() {
 	return angle;
 }
 
-int Encoder::test() {
-	return 1;
+String Encoder::test() {
+	return "1";
 }
