@@ -1,6 +1,5 @@
 #include "Encoder.h"
 #include "Arduino.h"
-#include "Encoder.h"
 
 Encoder::Encoder(int pinLeft, int pinRight) {
 	_pinLeft = pinLeft;
