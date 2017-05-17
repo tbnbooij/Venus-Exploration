@@ -55,12 +55,9 @@ void Encoder::updateRelativePosition(float reading[2]) {
 		}
 }
 
-void Encoder::checkDistanceDriven(float xStart, float yStart, float distance) {
+boolean Encoder::checkDistanceDriven(float xStart, float yStart, float distance) {
 	if(distance > 0) { // set when starting driving
-		if( sqrt(pow(x-xStart, 2)+pow(y-yStart,2)) >= distance ) {
-			//stopDriving(); // OR WHATEVER THE FUNCTION IS CALLED IN MOTOR CONTROL
-			distance = 0;
-		}
+		return sqrt(pow(x-xStart, 2)+pow(y-yStart,2)) >= distance;
 	}
 }
 
