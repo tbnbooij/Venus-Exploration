@@ -83,3 +83,7 @@ float Encoder::getY() {
 float Encoder::getAngle() {
 	return angle;
 }
+
+int Encoder::test() {
+	return 1;
+}

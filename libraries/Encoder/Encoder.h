@@ -33,6 +33,7 @@ class Encoder
 		float getX();
 		float getY();
 		float getAngle();
+		int test();
 };
 
 #endif

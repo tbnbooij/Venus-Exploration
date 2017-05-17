@@ -7,8 +7,6 @@ void setup() {
 }
 
 void loop() {
-	float reading[2];
-	encoder.readEncoder(reading);
-	encoder.updateRelativePosition(reading);
-	//encoder.checkDistanceDriven(0, 0, 0);
+	Serial.println("Encoder library: " + encoder.test());
+  Serial.println("Drive library: " + drive.test());
 }
