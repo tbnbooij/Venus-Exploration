@@ -24,7 +24,7 @@ class Encoder
 
 		float boundAngle(float a);
 	public:
-		Encoder(int pinLeft, int pinRight);
+		Encoder(int robot);
         
 		void readEncoder(float a[]);
 		void updateRelativePosition(float reading[2]);

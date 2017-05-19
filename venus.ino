@@ -1,7 +1,7 @@
 #include <Encoder.h>
 #include <Drive.h>
 
-Encoder encoder(7,8);
+Encoder encoder(1);
 Drive drive(9, 10, 13, 12);
 
 int i = 0;
