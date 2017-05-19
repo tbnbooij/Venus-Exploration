@@ -7,8 +7,8 @@ Motion motion(1);
 int i = 0;
 
 void setup() {
-  Serial.begin(9600);
-  motion.setup();
+	Serial.begin(9600);
+	motion.setup();
 }
 
 void loop() {
