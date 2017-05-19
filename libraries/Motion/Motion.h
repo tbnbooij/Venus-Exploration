@@ -1,14 +1,15 @@
-#ifndef Drive_h
-#define Drive_h
+#ifndef Motion_h
+#define Motion_h
 
 #include "Arduino.h"
 #include "Servo.h"
 
-class Drive
+class Motion
 {
 	private:
 		Servo servoLeft;                             // Declare left and right servos
 		Servo servoRight;
+		Servo servoGrab;
 
 		boolean isDriving = false;
 		float distance = 0;
@@ -17,15 +18,16 @@ class Drive
 		int pingPin;
 		int ultraSoundServo;		                // Pin where the servo of the ultrasound sensor is connected
 		int maxDistance = 20;                       // Distance detected where so stop driving
-		int turnTime = 200;                         // Time to turn when detecting something
+		int turnTime = 20;                         // Time to turn when detecting something
 		int initialSetupUltrasoundServo = 100;      // Amount of time needed to return ultrasound servo to the initial position
 		int servoLeftPin;		                    // Pin for left servo wheel
 		int servoRightPin;      		            // Pin for right servo wheel
 		int degreeRight = 20;	                    // Amount of degrees on the left side of the ultrasound sensor
 		int degreeLeft = 110;                       // Amount of degrees on the right side of the ultrasound sensor
 		int ultraServoDelay = 6;                    // Time the ultrasound servo needs to turn before meassuring can start again
+		int servoGrabPin;
 	public:
-		Drive(int a, int b, int c, int d);
+		Motion(int robot);
 		void setup();
 		String test();
 		
@@ -35,6 +37,8 @@ class Drive
 		void turnAfterObstacle(int angle);
 		void startDriving();
 		void stopDriving();
+		void openGrabber();
+		void closeGrabber();
 };
 
 #endif

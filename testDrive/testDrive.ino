@@ -1,17 +1,23 @@
-#include <Drive.h>
+#include <Motion.h>
 
-Drive drive(9,10,13,12);
+Motion motion(2);
+
 
 void setup() {
   Serial.begin(9600);
-  drive.setup();
+  motion.setup();
 }
 
 void loop() {
+
+  motion.openGrabber();
+  delay(1000);
+  motion.closeGrabber();
+  delay(2000);
   
-  int obstacle = drive.measureUltrasound();
+  /*int obstacle = motion.measureUltrasound();
   if(obstacle == -1){  
-    drive.startDriving();
+    motion.startDriving();
   }
-  else {drive.turnAfterObstacle(obstacle);}
+  else {motion.turnAfterObstacle(obstacle);}*/
 }

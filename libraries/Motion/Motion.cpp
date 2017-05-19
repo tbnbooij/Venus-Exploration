@@ -1,25 +1,34 @@
-#include "Drive.h"
+#include "Motion.h"
 #include "Arduino.h"
 #include "Servo.h"
 
-Drive::Drive(int a, int b, int c, int d) {
-	pingPin = a;
-	ultraSoundServo = b;
-	servoLeftPin = c;
-	servoRightPin = d;
+Motion::Motion(int robot) {
+	if(robot == 1) {
+		pingPin = 9; //robot 1:9 robot 2:9
+		ultraSoundServo = 10; //robot 1:10 robot 2:11
+		servoLeftPin = 13; //robot 1:13 robot 2:12
+		servoRightPin = 12; //robot 1:12 robot 2:13
+		servoGrabPin = 11; //robot 1:11 robot 2:10
+	} else if(robot == 2) {
+		pingPin = 9; //robot 1:9 robot 2:9
+		ultraSoundServo = 11; //robot 1:10 robot 2:11
+		servoLeftPin = 12; //robot 1:13 robot 2:12
+		servoRightPin = 13; //robot 1:12 robot 2:13
+		servoGrabPin = 10; //robot 1:11 robot 2:10
+	}
 }
 
-void Drive::setup() {
+void Motion::setup() {
 	servoUltrasound.attach(ultraSoundServo);
     servoUltrasound.write(50);
     delay(initialSetupUltrasoundServo);
 }
 
-String Drive::test() {
+String Motion::test() {
 	return "1";
 }
 
-int Drive::measureUltrasound(){
+int Motion::measureUltrasound(){
   
     for (int i=degreeRight; i<degreeLeft; i=i+1){    
 		servoUltrasound.attach(ultraSoundServo);
@@ -35,7 +44,7 @@ int Drive::measureUltrasound(){
 }
 
 
-float Drive::measurement(){  
+float Motion::measurement(){  
   // establish variables for duration of the ping,
   // and the distance result in inches and centimeters:
   float duration, cm;
@@ -67,14 +76,14 @@ float Drive::measurement(){
   
 }
 
-float Drive::microsecondsToCentimeters(float microseconds) {
+float Motion::microsecondsToCentimeters(float microseconds) {
   // The speed of sound is 340 m/s or 29 microseconds per centimeter.
   // The ping travels out and back, so to find the distance of the
   // object we take half of the distance travelled.
   return microseconds / 29 / 2;
 }
 
-void Drive::turnAfterObstacle(int angle){
+void Motion::turnAfterObstacle(int angle){
     servoLeft.attach(servoLeftPin);                     
     servoRight.attach(servoRightPin); 
     if (angle > 75 ){
@@ -90,15 +99,40 @@ void Drive::turnAfterObstacle(int angle){
     servoRight.detach(); 
 }
 
-void Drive::startDriving() {
+void Motion::startDriving() {
 	servoLeft.attach(servoLeftPin);                     
     servoRight.attach(servoRightPin); 
     servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
     servoRight.writeMicroseconds(1300);        // Right wheel clockwise
 }
 
-void Drive::stopDriving(){
+void Motion::stopDriving(){
     servoLeft.detach();
     servoRight.detach(); 
 }
 
+void Motion::openGrabber(){
+	// first robot
+	if(servoGrabPin == 11) {
+		servoGrab.attach(servoGrabPin);
+		servoGrab.write(180);
+	}
+	// second robot
+	else {
+		servoGrab.attach(servoGrabPin);
+		servoGrab.write(0);
+	}
+}
+
+void Motion::closeGrabber(){
+	// first robot
+	if(servoGrabPin == 11) {
+		servoGrab.attach(servoGrabPin);
+		servoGrab.write(0);
+	}
+	// second robot
+	else {
+		servoGrab.attach(servoGrabPin);
+		servoGrab.write(180);
+	}
+}
