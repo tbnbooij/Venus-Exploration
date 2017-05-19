@@ -2,6 +2,7 @@
 #define Encoder_h
 
 #include "Arduino.h"
+#include "Math.h"
 
 class Encoder
 {
@@ -25,9 +26,11 @@ class Encoder
 		float boundAngle(float a);
 	public:
 		Encoder(int robot);
+		void setup();
         
-		void readEncoder(float a[]);
-		void updateRelativePosition(float reading[2]);
+		float readLeftEncoder(int leftWheelStatus);
+		float readRightEncoder(int rightWheelStatus);
+		void updateRelativePosition(int leftWheelStatus, int rightWheelStatus);
 		boolean checkDistanceDriven(float xStart, float yStart, float distance);
         
 		float getX();
