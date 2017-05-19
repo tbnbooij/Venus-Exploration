@@ -89,14 +89,17 @@ void Motion::turnAfterObstacle(int angle){
     if (angle > 75 ){
       servoLeft.writeMicroseconds(1700);         
       servoRight.writeMicroseconds(1700);
+	  leftWheelStatus = 1;
+	  rightWheelstatus = -1;
     }
     if (angle <= 75 ){
       servoLeft.writeMicroseconds(1300);         
       servoRight.writeMicroseconds(1300);
+	  leftWheelStatus = -1;
+	  rightWheelstatus = 1;
     }
     delay(turnTime);
-    servoLeft.detach();
-    servoRight.detach(); 
+    stopDriving();
 }
 
 void Motion::startDriving() {
@@ -104,11 +107,23 @@ void Motion::startDriving() {
     servoRight.attach(servoRightPin); 
     servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
     servoRight.writeMicroseconds(1300);        // Right wheel clockwise
+	leftWheelStatus = 1;
+	rightWheelStatus = 1;
 }
+
+/*void startDriving(float x, float y, float d) {
+	startDriving();
+	distanceEncoder = d;
+	startX = x;
+	startY = y;
+	
+}*/
 
 void Motion::stopDriving(){
     servoLeft.detach();
     servoRight.detach(); 
+	leftWheelStatus = 0;
+	rightWheelstatus = 0;
 }
 
 void Motion::openGrabber(){
@@ -135,4 +150,17 @@ void Motion::closeGrabber(){
 		servoGrab.attach(servoGrabPin);
 		servoGrab.write(180);
 	}
+}
+
+void Motion::grabObject(){
+	openGrabber();
+	//Drive a certain distance
+	closeGrabber();	
+}
+
+void Motion::dropObject(){
+	openGrabber();
+	//backup a certain distance
+	closeGrabber();
+	
 }
