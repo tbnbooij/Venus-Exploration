@@ -18,13 +18,13 @@ class Encoder
 		float y;
 		float angle;
         
-		const float unitsAxisWidth = 1;
-		const float radius = 1;
+		const float unitsAxisWidth = 0.1102;
+		const float radius = 0.032;				// radius wheels in meters
 		float circumference;
 
 		float boundAngle(float a);
 	public:
-		Encoder(int pinLeft, int pinRight);
+		Encoder(int robot);
         
 		void readEncoder(float a[]);
 		void updateRelativePosition(float reading[2]);
@@ -33,7 +33,7 @@ class Encoder
 		float getX();
 		float getY();
 		float getAngle();
-		int test();
+		String test();
 };
 
 #endif

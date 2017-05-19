@@ -1,9 +1,14 @@
 #include "Encoder.h"
 #include "Arduino.h"
 
-Encoder::Encoder(int pinLeft, int pinRight) {
-	_pinLeft = pinLeft;
-	_pinRight = pinRight;
+Encoder::Encoder(int robot) {
+	if(robot == 1) {
+		_pinLeft = 7;
+		_pinRight = 8;
+	} else {
+		_pinLeft = 7;
+		_pinRight = 8;
+	}
 
 	pinMode(pinLeft, INPUT);
 	pinMode(pinRight, INPUT);
@@ -36,7 +41,7 @@ void Encoder::readEncoder(float a[]) {
 }
 
 void Encoder::updateRelativePosition(float reading[2]) {
-	float leftDelta = reading[0];
+		float leftDelta = reading[0];
 		float rightDelta = reading[1];
 
 		// leftDelta and rightDelta = distance that the left and right wheel have moved along
@@ -84,6 +89,6 @@ float Encoder::getAngle() {
 	return angle;
 }
 
-int Encoder::test() {
-	return 1;
+String Encoder::test() {
+	return "1";
 }
