@@ -6,8 +6,8 @@
 class Encoder
 {
 	private:
-		int _pinLeft;
-		int _pinRight;
+		int pinLeft;
+		int pinRight;
 
 		int leftEncoderState;
 		int lastLeftEncoderState;

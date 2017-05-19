@@ -3,11 +3,11 @@
 
 Encoder::Encoder(int robot) {
 	if(robot == 1) {
-		_pinLeft = 7;
-		_pinRight = 8;
+		pinLeft = 7;
+		pinRight = 8;
 	} else {
-		_pinLeft = 7;
-		_pinRight = 8;
+		pinLeft = 7;
+		pinRight = 8;
 	}
 
 	pinMode(pinLeft, INPUT);
@@ -18,7 +18,7 @@ void Encoder::readEncoder(float a[]) {
 	float leftDelta = 0.0;
 	float rightDelta = 0.0;
 
-	leftEncoderState = digitalRead(_pinLeft);
+	leftEncoderState = digitalRead(pinLeft);
 	if(leftEncoderState != lastLeftEncoderState) {
 		if(leftEncoderState == HIGH) {
 			//rising trigger
@@ -27,7 +27,7 @@ void Encoder::readEncoder(float a[]) {
 	}
 	lastLeftEncoderState = leftEncoderState;
 
-	rightEncoderState = digitalRead(_pinRight);
+	rightEncoderState = digitalRead(pinRight);
 	if(rightEncoderState != lastRightEncoderState) {
 		if(rightEncoderState == HIGH) {
 			//rising trigger
