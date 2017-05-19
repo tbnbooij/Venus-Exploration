@@ -2,7 +2,7 @@
 #include <Drive.h>
 
 Encoder encoder(1);
-Drive drive(9, 10, 13, 12);
+Drive drive(1);
 
 int i = 0;
 

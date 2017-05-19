@@ -3,7 +3,7 @@
  
 Servo servoLeft;                             // Declare left and right servos
 Servo servoRight;
-
+ 
 boolean isDriving = false;
 float distance = 0;
 
@@ -27,7 +27,6 @@ void setup() {
 }
 
 void loop() {
-  
   boolean drive = meassureUltrasound();
   if(drive == true){  
     // Full speed forward
