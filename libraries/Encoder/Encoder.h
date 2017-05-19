@@ -18,8 +18,8 @@ class Encoder
 		float y;
 		float angle;
         
-		const float unitsAxisWidth = 1;
-		const float radius = 1;
+		const float unitsAxisWidth = 0.1102;
+		const float radius = 0.032;				// radius wheels in meters
 		float circumference;
 
 		float boundAngle(float a);

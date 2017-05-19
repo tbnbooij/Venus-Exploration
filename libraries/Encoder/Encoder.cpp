@@ -36,7 +36,7 @@ void Encoder::readEncoder(float a[]) {
 }
 
 void Encoder::updateRelativePosition(float reading[2]) {
-	float leftDelta = reading[0];
+		float leftDelta = reading[0];
 		float rightDelta = reading[1];
 
 		// leftDelta and rightDelta = distance that the left and right wheel have moved along
