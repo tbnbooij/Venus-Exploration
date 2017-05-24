@@ -36,6 +36,7 @@ class Motion
 		float microsecondsToCentimeters(float microseconds);
 		void turnAfterObstacle(int angle);
 		void startDriving();
+		void startDrivingBackwards();
 		void stopDriving();
 		void openGrabber();
 		void closeGrabber();
