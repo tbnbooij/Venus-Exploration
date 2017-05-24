@@ -6,9 +6,11 @@ Encoder::Encoder(int robot) {
 	if(robot == 1) {
 		pinLeft = 7;
 		pinRight = 8;
+		radius = 0.03435;
 	} else {
 		pinLeft = 7;
 		pinRight = 8;
+		radius = 0.034;
 	}
 }
 
@@ -78,13 +80,21 @@ void Encoder::updateRelativePosition(int leftWheelStatus, int rightWheelStatus) 
 
 			x = x + R * sin(wd + angle) - R * sin(angle);
 			y = y - R * cos(wd + angle) + R * cos(angle);
-			angle = boundAngle(angle + wd);
+			angle = angle + wd;
 		}
 }
 
 boolean Encoder::checkDistanceDriven(float xStart, float yStart, float distance) {
 	if(distance > 0) { // set when starting driving
 		return sqrt(pow(x-xStart, 2)+pow(y-yStart,2)) >= distance;
+	}
+}
+
+boolean checkAngleTurned(float begin, float a, boolean increasing) {
+	if(increasing) {
+		return begin + a <= angle;
+	} else {
+		return begin - a >= angle;
 	}
 }
 
@@ -108,6 +118,10 @@ float Encoder::getY() {
 }
 
 float Encoder::getAngle() {
+	return boundAngle(angle);
+}
+
+float Encoder::getRawAngle() {
 	return angle;
 }
 

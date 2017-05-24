@@ -2,6 +2,7 @@
 #include <Motion.h>
 const int robot = 1;
 
+float angle_start;
 
 Encoder encoder(robot);
 Motion motion(robot);
@@ -13,12 +14,15 @@ void setup() {
 	motion.setup();
   encoder.setup();
 
-  motion.startDriving();
+  
+  motion.turnLeft();
+  angle_start = encoder.getAngle();
+ 
 }
 
 void loop() {
   encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
-  if(encoder.checkDistanceDriven(0, 0, 1)) {
+  if(encoder.checkAngleTurned(angle_start, 360, true)) {
     motion.stopDriving();
   } else {
     Serial.print("x: ");

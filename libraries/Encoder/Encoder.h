@@ -20,7 +20,7 @@ class Encoder
 		float angle;
         
 		const float unitsAxisWidth = 0.1102;
-		const float radius = 0.032;				// radius wheels in meters
+		float radius;				// radius wheels in meters
 		float circumference;
 
 		float boundAngle(float a);
@@ -32,10 +32,12 @@ class Encoder
 		float readRightEncoder(int rightWheelStatus);
 		void updateRelativePosition(int leftWheelStatus, int rightWheelStatus);
 		boolean checkDistanceDriven(float xStart, float yStart, float distance);
+		boolean checkAngleTurned(float begin, float a, boolean increasing);
         
 		float getX();
 		float getY();
 		float getAngle();
+		float getRawAngle();
 		String test();
 };
 
