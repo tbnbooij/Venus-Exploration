@@ -37,6 +37,8 @@ class Motion
 		void turnAfterObstacle(int angle);
 		void startDriving();
 		void startDrivingBackwards();
+		void turnRight();
+		void turnLeft();
 		void stopDriving();
 		void openGrabber();
 		void closeGrabber();
