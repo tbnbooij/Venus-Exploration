@@ -20,7 +20,7 @@ Motion::Motion(int robot) {
 
 void Motion::setup() {
 	servoUltrasound.attach(ultraSoundServo);
-    servoUltrasound.write(50);
+    servoUltrasound.write(75);
     delay(initialSetupUltrasoundServo);
 }
 
@@ -102,11 +102,38 @@ void Motion::turnAfterObstacle(int angle){
     stopDriving();
 }
 
+void Motion::turnLeft() {
+	servoLeft.attach(servoLeftPin);                     
+    servoRight.attach(servoRightPin);
+	servoLeft.writeMicroseconds(1300);         
+    servoRight.writeMicroseconds(1300);
+	leftWheelStatus = -1;
+	rightWheelStatus = 1;
+}
+
+void Motion::turnRight() {
+	servoLeft.attach(servoLeftPin);                     
+    servoRight.attach(servoRightPin);
+	servoLeft.writeMicroseconds(1700);         
+    servoRight.writeMicroseconds(1700);
+	leftWheelStatus = 1;
+	rightWheelStatus = -1;
+}
+
 void Motion::startDriving() {
 	servoLeft.attach(servoLeftPin);                     
     servoRight.attach(servoRightPin); 
     servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
     servoRight.writeMicroseconds(1300);        // Right wheel clockwise
+	leftWheelStatus = 1;
+	rightWheelStatus = 1;
+}
+
+void Motion::startDrivingBackwards() {
+	servoLeft.attach(servoLeftPin);                     
+    servoRight.attach(servoRightPin); 
+    servoLeft.writeMicroseconds(1300);         // Left wheel counterclockwise
+    servoRight.writeMicroseconds(1700);        // Right wheel clockwise
 	leftWheelStatus = 1;
 	rightWheelStatus = 1;
 }

@@ -14,7 +14,9 @@ void setup() {
 
 void loop() {
 
-  motion.grabObject();
+  motion.measurement();
+
+  /*motion.grabObject();*/
     
    /*while(test == 1){ 
     motion.closeGrabber();
