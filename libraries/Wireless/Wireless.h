@@ -33,6 +33,7 @@ class Wireless
 		void printQueue(String queue[]);
 		void go();
 		void debugMessage(String function, String msg);
+		void clearQueue(String queue[])
 };
 
 #endif

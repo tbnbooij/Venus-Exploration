@@ -14,6 +14,7 @@ String msgQueue[QUEUE_SIZE] = {""};
 String readBuffer = "";
 int amReads = -1;
 int pingId = -1;
+bool pingPriority = false;
 
 // Constructor
 Wireless::Wireless(int seed) {
@@ -40,7 +41,7 @@ void Wireless::send() {
     // Create the messages
     createMessages(filled);
 
-    if(DEBUG) { printQueue(msgQueue); };
+    printQueue(msgQueue);
 
     int8_t amFilled = getNoFilled(msgQueue);
 
@@ -83,6 +84,8 @@ void Wireless::send() {
     }
   }
 	pingId = -1;
+	clearQueue(sendQueue);
+	clearQueue(msgQueue);
 }
 
 // Immediate read - After sending message on sender side
@@ -118,15 +121,17 @@ int Wireless::immRead() {
 
 // Print a queue (DEBUG)
 void Wireless::printQueue(String queue[]) {
-  for(int i = 0; i < QUEUE_SIZE; i++) {
-    Serial.print(String(i+1) + ": ");
-    if(queue[i] == "") {
-      Serial.println("-");
-    }
-    else {
-      Serial.println(queue[i]);
-    }
-  }
+	if(DEBUG) {
+		for(int i = 0; i < QUEUE_SIZE; i++) {
+			Serial.print(String(i+1) + ": ");
+			if(queue[i] == "") {
+				Serial.println("-");
+			}
+			else {
+				Serial.println(queue[i]);
+			}
+		}
+	}
 }
 
 // Create messages from the sendQueue
@@ -298,6 +303,7 @@ void Wireless::sendLater(String msg) {
 	if(pingId == -1) {
 		pingId = random(10,10000);
 		String pingMsg = ('>' + String(pingId)) + '~';
+		Serial.print(pingMsg);
 		debugMessage(funcName, pingMsg);
 	}
 }
@@ -323,6 +329,18 @@ void Wireless::read() {
   printQueue(readQueue);
 }
 
+// Wipes all spaces of a queue
+void Wireless::clearQueue(String queue[]) {
+	for(int i = 0; i < QUEUE_SIZE; i++) {
+		if(queue[i] != "") {
+			queue[i] = "";
+		}
+		else {
+			break;
+		}
+	}
+}
+
 // GLOBAL GATEWAY FUNCTION
 void Wireless::go() {
 	String funcName = "GO";
@@ -338,9 +356,18 @@ void Wireless::go() {
 			String oid = buffer.substring(initPing+1, endHash);
 			int oidInt = oid.toInt();
 
-			if(oidInt >= pingId) {
-				debugMessage(funcName, "read");
+			if(oidInt > pingId) {
+				debugMessage(funcName, "read1");
 				read();
+			}
+			else if(oidInt == pingId) {
+				if(pingPriority) {
+					debugMessage(funcName, "send4");
+					send();
+				}
+				else {
+					debugMessage(funcName, "read2");
+				}
 			}
 			else {
 				debugMessage(funcName, "send1");
