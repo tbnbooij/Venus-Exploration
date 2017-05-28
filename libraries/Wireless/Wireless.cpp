@@ -10,10 +10,9 @@
 
 String readQueue[QUEUE_SIZE] = {""};
 String sendQueue[QUEUE_SIZE] = {""};
-String msgQueue[QUEUE_SIZE] = {""};
 String readBuffer = "";
-int amReads = -1;
-int pingId = -1;
+int8_t amReads = -1;
+int8_t pingId = -1;
 bool pingPriority = false;
 
 // Constructor
@@ -39,90 +38,89 @@ void Wireless::send() {
   // If there is something to send ...
   if(filled > 0) {
     // Create the messages
-    createMessages(filled);
+    createPackets(filled);
 
-    printQueue(msgQueue);
 
-    int8_t amFilled = getNoFilled(msgQueue);
+    printQueue(sendQueue);
 
-		bool block = true;
+    int8_t amFilled = getNoFilled(sendQueue);
+
 		debugMessage(funcName, "Waiting for [*]");
-		while(block) {
-			String buffer = Serial.readString();
-			int8_t ob = buffer.indexOf('[');
-			int8_t cb = buffer.indexOf(']', ob);
-			int8_t star = buffer.indexOf('*', ob);
 
-			if((ob != -1 && cb != -1 && star != -1) && (ob+1 == star && cb-1 == star)) {
-				block = false;
-			}
+		int8_t retVal = -1;
+
+		while(retVal != -2) {
+			String buffer = Serial.readString();
+			retVal = immRead();
 		}
 
-    int oid = random(0,10000);
-    int recOid = -1;
+    int8_t oid = random(0,128);
+    int8_t recOid = -1;
 
 		debugMessage(funcName, "init");
     while(oid != recOid) {
       Serial.print(("[#" + String(amFilled)) + ("@" + (String(oid) + "]")));
       recOid = immRead();
-      delay(IMM_READ_DELAY);
     }
 
-    for(int i = 0; i < amFilled; i++) {
-      String currentMsg = msgQueue[i];
+    for(int8_t i = 0; i < amFilled; i++) {
+      String currentMsg = sendQueue[i];
 			debugMessage(funcName, "Send - " + currentMsg);
-      int id = currentMsg.substring(currentMsg.indexOf('@')+1,currentMsg.indexOf(']')).toInt();
+      int8_t id = currentMsg.substring(currentMsg.indexOf('@')+1,currentMsg.indexOf(']')).toInt();
       Serial.print(id);
-      int recId = -1;
+      int8_t recId = -1;
 
 			debugMessage(funcName, "Wait");
       while(recId != id) {
         Serial.print(currentMsg);
         recId = immRead();
-        delay(IMM_READ_DELAY);
+
       }
     }
   }
 	pingId = -1;
 	clearQueue(sendQueue);
-	clearQueue(msgQueue);
 }
 
 // Immediate read - After sending message on sender side
-int Wireless::immRead() {
+int8_t Wireless::immRead() {
+	delay(IMM_READ_DELAY);
 	String funcName = "IMMREAD";
   if(Serial.available() > 0) {
     String buffer = Serial.readString();
     int8_t ob = buffer.indexOf('[');
     int8_t cb = buffer.indexOf(']',ob);
     int8_t dollar = buffer.indexOf('$',ob);
+		int8_t star = buffer.indexOf('*',ob);
+		int8_t hyphen = buffer.indexOf('-',ob);
 
-    if(ob != -1 && cb != -1 && dollar != -1) {
-      if(dollar < cb && dollar > ob) {
-				int recId = buffer.substring(dollar+1,cb).toInt();
-				debugMessage(funcName, String(recId));
-        return recId;
-      }
-      else {
-				debugMessage(funcName, "f1");
-        return -1;
-      }
-    }
-    else {
-			debugMessage(funcName, "f2");
-      return -1;
-    }
-  }
-  else {
-		debugMessage(funcName, "f3");
-    return -1;
-  }
+    if(ob != -1 && cb != -1) {
+			if(dollar != -1 && (dollar < cb && dollar > ob)) {
+					// Detected an ID tag!
+					int8_t recId = buffer.substring(dollar+1,cb).toInt();
+					debugMessage(funcName, String(recId));
+					return recId;
+			}
+
+			if(star != -1 && (ob+1 == star && cb-1 == star)) {
+				// Detected a START tag
+				return -2;
+			}
+
+			if(hyphen != -1 && (ob+1 == hyphen && cb-1 == hyphen)) {
+				return -3;
+			}
+		}
+	}
+	debugMessage(funcName,"fail");
+	return -1;
 }
+
 
 // Print a queue (DEBUG)
 void Wireless::printQueue(String queue[]) {
 	if(DEBUG) {
-		for(int i = 0; i < QUEUE_SIZE; i++) {
+		for(int8_t i = 0; i < QUEUE_SIZE; i++) {
 			Serial.print(String(i+1) + ": ");
 			if(queue[i] == "") {
 				Serial.println("-");
@@ -135,34 +133,16 @@ void Wireless::printQueue(String queue[]) {
 }
 
 // Create messages from the sendQueue
-void Wireless::createMessages(int amFilled) {
-  String tmp = "";
-  for(int i = 0; i < amFilled; i++) {
-    String potTmp = tmp;
-    if(tmp != "") {
-      potTmp += '|';
-    }
-
-    potTmp += sendQueue[i];
-
-    if(potTmp.length() <= PACKET_SIZE && (i+1) != amFilled) {
-      tmp = potTmp;
-    }
-    else {
-      String msg = '[' + potTmp;
-      msg += ('@' + String(random(0,10000)));
-      msg += ']';
-			debugMessage("CREATE", msg);
-      addToQueue(msg, msgQueue);
-      tmp = "";
-    }
+void Wireless::createPackets(int8_t amFilled) {
+  for(int8_t i = 0; i < amFilled; i++) {
+		sendQueue[i] = ("[" + sendQueue[i]) + (("@" + String(random(0,128))) + "]");
   }
 }
 
 // Get the amount of filled spots in a queue
-int Wireless::getNoFilled(String queue[]) {
+int8_t Wireless::getNoFilled(String queue[]) {
   int8_t filled = 0;
-  for(int i = 0; i < QUEUE_SIZE; i++) {
+  for(int8_t i = 0; i < QUEUE_SIZE; i++) {
     if(queue[i] != "") {
       filled++;
     }
@@ -195,28 +175,6 @@ void Wireless::addToQueue(String input, String queue[]) {
   }
 }
 
-// Split a packet string to seperate messages
-void Wireless::splitMessages(String msgs) {
-	String funcName = "SPLIT";
-  // Find the first split icon
-  int8_t split = msgs.indexOf('|');
-
-  // Are there multiple messages in the packet?
-  if(split != -1) {
-    // Then just find the first message, store it in the read queue
-    // and re-call this function starting at the second message
-		String newMessage = msgs.substring(0,split);
-		debugMessage(funcName, newMessage);
-    addToQueue(newMessage, readQueue);
-    splitMessages(msgs.substring(split+1));
-  }
-  else {
-    // There is only one message (left)
-    // Store this message in the read queue
-		debugMessage(funcName, msgs);
-    addToQueue(msgs, readQueue);
-  }
-}
 
 // Try to find a packet in a serial buffer
 void Wireless::searchPacket(String buffer) {
@@ -263,7 +221,7 @@ void Wireless::searchPacket(String buffer) {
         if(readBuffer != totalPacket) {
 					debugMessage(funcName, "new");
           // Split and store the message(s)
-          splitMessages(packet);
+					addToQueue(packet, readQueue);
 
 
 					// Keep track of the amount of expected transmissions
@@ -272,7 +230,7 @@ void Wireless::searchPacket(String buffer) {
 
 						// This is the last transmission => No checks anymore
 						// So as a safety precaution send the ID another 3 times
-						for(int i = 0; i < 3; i++) {
+						for(int8_t i = 0; i < 3; i++) {
 							sendId(buffer.substring(at+1,cb));
 							delay(30);
 						}
@@ -299,18 +257,11 @@ void Wireless::sendLater(String msg) {
 	String funcName = "SEND_L";
 	debugMessage(funcName, msg);
 	addToQueue(msg, sendQueue);
-
-	if(pingId == -1) {
-		pingId = random(10,10000);
-		String pingMsg = ('>' + String(pingId)) + '~';
-		Serial.print(pingMsg);
-		debugMessage(funcName, pingMsg);
-	}
 }
 
 // Read gateway
 void Wireless::read() {
-	for(int i = 0; i < 3; i++) {
+	for(int8_t i = 0; i < 3; i++) {
 		Serial.print("[*]");
 	}
 
@@ -331,7 +282,7 @@ void Wireless::read() {
 
 // Wipes all spaces of a queue
 void Wireless::clearQueue(String queue[]) {
-	for(int i = 0; i < QUEUE_SIZE; i++) {
+	for(int8_t i = 0; i < QUEUE_SIZE; i++) {
 		if(queue[i] != "") {
 			queue[i] = "";
 		}
@@ -344,51 +295,129 @@ void Wireless::clearQueue(String queue[]) {
 // GLOBAL GATEWAY FUNCTION
 void Wireless::go() {
 	String funcName = "GO";
-	// Get everything out of the buffer!
+	debugMessage(funcName,"Waiting for [-]");
+
+	int8_t wait = -1;
+
+	//  Wait for synchronization
+	while(wait != -3) {
+		wait = immRead();
+		Serial.print("[-]");
+	}
+	// Empty out serial buffer
+	Serial.readString();
+
+	// Do we want to send something?
+	if(getNoFilled(sendQueue) > 0) {
+		pingId = random(1,128);
+	}
+	else {
+		pingId = 0;
+	}
+
+	// Send a ping message
+	String pingMsg = ('>' + String(pingId)) + '~';
+	Serial.print(pingMsg);
+	debugMessage(funcName, pingMsg);
+	debugMessage(funcName, "PLEASE ENTER");
+	if(DEBUG){delay(5000);};
+	delay(100);
+
+	// And read a received message
 	String buffer = Serial.readString();
-	int initPing = buffer.indexOf('>');
+	int8_t initPing = buffer.indexOf('>');
+	int8_t endTilde = buffer.indexOf('~', initPing);
 
-	if(initPing != -1) {
-		int endHash = buffer.indexOf('~',initPing);
+	// Did we receive a ping message?
+	if((initPing != -1 && endTilde != -1) && (initPing < endTilde)) {
 
-		// Does the buffer contain a ping message?
-		if(endHash != -1) {
-			String oid = buffer.substring(initPing+1, endHash);
-			int oidInt = oid.toInt();
+		// Get the OTHER ping ID
+		int8_t oid = buffer.substring(initPing+1, endTilde).toInt();
 
-			if(oidInt > pingId) {
-				debugMessage(funcName, "read1");
+		if(oid == 0 && pingId >= 0) {
+			debugMessage(funcName, "s");
+			send();
+		}
+		else if(oid >= 0 && pingId == 0) {
+			debugMessage(funcName, "r");
+			read();
+		}
+		else if(oid >= 0 && pingId >= 0) {
+			if(oid > pingId) {
+				debugMessage(funcName, "r/s");
 				read();
+				send();
 			}
-			else if(oidInt == pingId) {
+			else if(oid == pingId) {
 				if(pingPriority) {
-					debugMessage(funcName, "send4");
+					debugMessage(funcName, "s/r");
 					send();
+					read();
 				}
 				else {
-					debugMessage(funcName, "read2");
+					debugMessage(funcName, "r/s");
+					read();
+					send();
 				}
 			}
 			else {
-				debugMessage(funcName, "send1");
+				debugMessage(funcName, "s/r");
+				send();
+				read();
+			}
+		}
+
+
+		if(oid > pingId) {
+			debugMessage(funcName, "r/s");
+			read();
+			send();
+		}
+		else if(oid == pingId) {
+			if(pingPriority) {
+				debugMessage(funcName, "s/r");
+				send();
+				read();
+			}
+			else {
+				debugMessage(funcName, "r/s");
+				read();
 				send();
 			}
 		}
 		else {
-			// We've received NO ping message
-			// Do we want to send something?
-			if(pingId > 0) {
-				debugMessage(funcName, "send2");
-				send();
-			}
-		}
-	}
-	else {
-		if(pingId > 0) {
-			// We've receive NO ping message
-			// AND we want to send something
-			debugMessage(funcName, "send3");
+			debugMessage(funcName, "s/r");
 			send();
+			read();
 		}
 	}
 }
+
+// GRAVEYARD
+/*
+
+// Split a packet string to seperate messages
+void Wireless::splitMessages(String msgs) {
+	String funcName = "SPLIT";
+  // Find the first split icon
+  int8_t split = msgs.indexOf('|');
+
+  // Are there multiple messages in the packet?
+  if(split != -1) {
+    // Then just find the first message, store it in the read queue
+    // and re-call this function starting at the second message
+		String newMessage = msgs.substring(0,split);
+		debugMessage(funcName, newMessage);
+    addToQueue(newMessage, readQueue);
+    splitMessages(msgs.substring(split+1));
+  }
+  else {
+    // There is only one message (left)
+    // Store this message in the read queue
+		debugMessage(funcName, msgs);
+    addToQueue(msgs, readQueue);
+  }
+}
+
+
+*/

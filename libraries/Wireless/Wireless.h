@@ -19,11 +19,11 @@ class Wireless
 	public:
 		Wireless(int seed);
 
-		int immRead();
-		void createMessages(int amFilled);
-		int getNoFilled(String queue[]);
+		int8_t immRead();
+		void createPackets(int8_t amFilled);
+		int8_t getNoFilled(String queue[]);
 		void addToQueue(String input, String queue[]);
-		void splitMessages(String msgs);
+		//void splitMessages(String msgs);
 		void searchPacket(String buffer);
 		void sendId(String id);
 
@@ -33,7 +33,7 @@ class Wireless
 		void printQueue(String queue[]);
 		void go();
 		void debugMessage(String function, String msg);
-		void clearQueue(String queue[])
+		void clearQueue(String queue[]);
 };
 
 #endif

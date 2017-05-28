@@ -2,44 +2,8 @@
 
 This is the library for the wireless communication. I know, this file seems long, but **don't be scared**; I'll explain how this works.
 
-## Table of contents
-- [How to use](#how-to-use)
-- [An informal explanation of the principle of operation](#an-informal-explanation-of-the-principle-of-operation)
-  * [Step 1 - Once upon a time](#step-1---once-upon-a-time)
-  * [Step 2 - Go!](#step-2---go)
-  * [Step 3 - And they lived happily every after](#step-3---and-they-lived-happily-every-after)
-- [Definitions](#definitions)
-  * [QUEUE_SIZE](#queue_size)
-  * [PACKET_SIZE](#packet_size)
-  * [IMM_READ_DELAY](#imm_read_delay)
-  * [DEBUG](#debug)
-- [Global variables](#global-variables)
-  * [readQueue](#readqueue)
-  * [sendQueue](#sendqueue)
-  * [msgQueue](#msgqueue)
-  * [readBuffer](#readbuffer)
-  * [amReads](#amreads)
-  * [pingId](#pingid)
-  * [pingPriority](#pingpriority)
-- [Functions](#functions)
-  * [Wireless()](#wireless)
-  * [Wireless::go()](#wirelessgo)
-  * [Wireless::read()](#wirelessread)
-  * [Wireless::send()](#wirelesssend)
-  * [Wireless::debugMessage()](#wirelessdebugmessage)
-  * [Wireless::printQueue()](#wirelessprintqueue)
-  * [Wireless::sendLater()](#wirelesssendlater)
-  * [Wireless::searchPacket()](#wirelesssearchpacket)
-  * [Wireless::sendId()](#wirelesssendid)
-  * [Wireless::splitMessages()](#wirelesssplitmessages)
-  * [Wireless::addToQueue()](#wirelessaddtoqueue)
-  * [Wireless::getNoFilled()](#wirelessgetnofilled)
-  * [Wireless::createMessages()](#wirelesscreatemessages)
-  * [Wireless::immRead()](#wirelessimmread)
-
-
 ## How to use
-Firsly, import the library into the Arduino sketch. and create an instance of the class.
+Firstly, import the library into the Arduino sketch. and create an instance of the class.
 
 ```Arduino
 #include <Wireless.h>
@@ -71,9 +35,17 @@ So, Romeo wants to send a message to Juliet; let's say it is ```helloJuliet```. 
 So, all in all, when a robot wants to send something firstly some sort of turn order has to be established.
 
 ### Step 2 - Go!
-At multiple moments in the loop, the ```.go()``` method is called. This function determines the aforementioned turn order and assigns both robots to their respective roles (read/send). These actions are tied to different functions with very vague and unexpected names: ```.read()``` and ```.send()```. The sender will create composite messages called **packets**. These have a very specific syntax: ```[messages@id]``` in which ```messages``` can be one or more messages and id is a random integer. If multiple messages are put into a packet, it will look like this: ```[hello|world|how|are|you@123]```.
+At multiple moments in the loop, the ```.go()``` method is called. This function determines the aforementioned turn order and assigns both robots to their respective roles (read/send). These actions are tied to different functions with very vague and unexpected names: ```.read()``` and ```.send()```. The sender will create composite messages called **packets**. These have a very specific syntax: ```[message@id]``` in which ```messages``` is be one message from the ```sendQueue``` and id is a random integer.
 
-So, Romeo will create these packets. But before he can send them, he wants to receive ```[*]``` from Juliet. That message indicates that Juliet has entered read mode and that Romeo can start sending messages. The first packet Romeo sends will be a bit different than the previously described ones; it looks like this: ```[#num@id]```. ```num``` is the amount of _packets_ that Romeo will send to Juliet. Now, just like before, Romeo will wait for something that Juliet sends. This time, it will be this message: ```[$id]``` (```id``` is the id from the packet). Interpret this as a sort of _aye-aye_ from Juliet; it indicates that she has received and processed a packet.
+It is very important to keep wireless check-ups (i.e. the ```.go()``` method) synchronized. In order to do this, Both robots will wait for a start sign to be exchanged (in this case ```[-]```).
+
+All in all, the turn order is determined in this way:
+
+1. Wait for synchronization (```[-]``` exchanged)
+2. Exchange ping IDs
+3. Determine order based on IDs
+
+Romeo will create these packets. But before he can send them, he wants to receive ```[*]``` from Juliet. That message indicates that Juliet has entered read mode and that Romeo can start sending messages. The first packet Romeo sends will be a bit different than the previously described ones; it looks like this: ```[#num@id]```. ```num``` is the amount of _packets_ that Romeo will send to Juliet. Now, just like before, Romeo will wait for something that Juliet sends. This time, it will be this message: ```[$id]``` (```id``` is the id from the packet). Interpret this as a sort of _aye-aye_ from Juliet; it indicates that she has received and processed a packet.
 
 The actual packets will now be sent in a similar fashon: Romeo sends a packet, Juliet responds with the id. Only when Romeo receives the id will he switch to the next packet. Juliet will decipher the packets and place the messages in the ```readQueue```, which holds all the received messages for later processing.
 
@@ -105,9 +77,6 @@ A queue (string array of size ```QUEUE_SIZE```) for all the messages that have b
 ### sendQueue
 A queue (string array of size ```QUEUE_SIZE```) for all the messages that have to be sent.
 
-### msgQueue
-A queue (string array of size ```QUEUE_SIZE```) for all the messages that are created by ```Wireless::createMessages()```.
-
 ### readBuffer
 A (usually empty) string used to determine whether a received packet has already been processed (in order to prevent duplicates).
 
@@ -125,13 +94,13 @@ In case the pingIds of both robots are equal (it's unlikely, but it **could** ha
 ### Wireless()
 The constructor of the class. Takes in an integer for the as a seed for the ```random()``` function.
 
-**Input**: ```int seed```
+**Input**: ```int8_t seed```
 **Output**: ```void```
 
 ### Wireless::go()
 The go-to (pun intended 😃) function for wireless communication. Automatically creates a connection and established unidirectional message flow.
 
-**Input**: ```int seed```
+**Input**: ```void```
 **Output**: ```void```
 
 _Note: If everything works as it should, this will be the only function that is needed for wireless communication._
@@ -185,15 +154,9 @@ Takes in a serial buffer and tries to search for a packet of syntax ```[message@
 ### Wireless::sendId()
 Takes in an id (number) and prints an id return tag.
 
-**Input**: ```int id```
+**Input**: ```int8_t id```
 **Output**: ```void```
 **Serial Output**: ```[$id]```
-
-### Wireless::splitMessages()
-Takes in the body of a packet (a set of messages) and splits these into seperate messages. These will be passed to ```Wireless::addToQueue()``` to add them to the ```readQueue```.
-
-**Input**: ```int messages```
-**Output**: ```void```
 
 ### Wireless::addToQueue()
 Takes in a string input and a String queue and adds the input to the first vacant spot in that queue.
@@ -205,16 +168,22 @@ Takes in a string input and a String queue and adds the input to the first vacan
 Takes in a queue and returns the amount of filled spaces.
 
 **Input**: ```String queue[]```
-**Output**: ```int amountOfFiledSpaces```
+**Output**: ```int8_t amountOfFiledSpaces```
 
-### Wireless::createMessages()
-Creates larger conglomerate messages of single items in the ```sendQueue``` to reduce the amount of transactions. Takes in the amount of filled spaces in the ```sendQueue``` (```int```).
+### Wireless::createPackets()
+Creates packets of single items in the ```sendQueue```. Takes in the amount of filled spaces in the ```sendQueue``` (```int8_t```).
 
-**Input**: ```int amFilled```
+**Input**: ```int8_t amFilled```
 **Output**: ```void```
 
-### Wireless::immRead()
-(Read: Immediate read) Used in ```Wireless::send()```. Function that returns the id of an id tag that has been returned by the receiver **if** it finds a return tag in the serial buffer (else it returns -1).
+### Wireless::immRead() (immediate read)
+Used in functions that wait for a response from the other robot. Function that returns the id of an id tag that has been returned by the receiver **if** it finds a return tag in the serial buffer (else it returns -1).
 
 **Input**: ```void```
-**Output**: ```int id```
+**Output**: ```int8_t id```
+
+### Wireless::clearQueue()
+Empty out all spaces in a queue.
+
+**Input**: ```String queue[]```
+**Output**: ```void```
