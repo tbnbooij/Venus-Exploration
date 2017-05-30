@@ -8,32 +8,24 @@
 #ifndef Wireless_h
 #define Wireless_h
 #define QUEUE_SIZE 10
-#define PACKET_SIZE 10
-#define IMM_READ_DELAY 50
-#define DEBUG true
 
 #include "Arduino.h"
 
 class Wireless
 {
+	private:
+		int _read;
 	public:
-		Wireless(int seed);
 
-		int8_t immRead();
-		void createPackets(int8_t amFilled);
-		int8_t getNoFilled(String queue[]);
-		void addToQueue(String input, String queue[]);
-		//void splitMessages(String msgs);
-		void searchPacket(String buffer);
-		void sendId(String id);
-
-    void send();
-		void read();
-		void sendLater(String msg);
+		Wireless();
+		void send(String msg);
+		void store(String msg);
 		void printQueue(String queue[]);
-		void go();
-		void debugMessage(String function, String msg);
-		void clearQueue(String queue[]);
+		void process();
+		void interpret();
+		String sendQueue[QUEUE_SIZE] = {""};
+		String readQueue[QUEUE_SIZE] = {""};
+
 };
 
 #endif
