@@ -22,7 +22,7 @@ void setup() {
 
 void loop() {
   encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
-  if(encoder.checkAngleTurned(angle_start, 360, true)) {
+  if(encoder.checkAngleTurned(angle_start, 2*M_PI, true)) {
     motion.stopDriving();
   } else {
     Serial.print("x: ");

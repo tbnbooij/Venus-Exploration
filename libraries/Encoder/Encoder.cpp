@@ -7,10 +7,12 @@ Encoder::Encoder(int robot) {
 		pinLeft = 7;
 		pinRight = 8;
 		radius = 0.03435;
+		unitsAxisWidth = 0.1102;
 	} else {
 		pinLeft = 7;
 		pinRight = 8;
 		radius = 0.034;
+		unitsAxisWidth = 0.1102;
 	}
 }
 
@@ -90,7 +92,7 @@ boolean Encoder::checkDistanceDriven(float xStart, float yStart, float distance)
 	}
 }
 
-boolean checkAngleTurned(float begin, float a, boolean increasing) {
+boolean Encoder::checkAngleTurned(float begin, float a, boolean increasing) {
 	if(increasing) {
 		return begin + a <= angle;
 	} else {
@@ -99,13 +101,14 @@ boolean checkAngleTurned(float begin, float a, boolean increasing) {
 }
 
 float Encoder::boundAngle(float a) {
-	if(a < 0) {
+	while(a < 0) {
 		a += 2*M_PI;
 	}
 
-	if(a > 2*M_PI) {
+	while(a > 2*M_PI) {
 		a -= 2* M_PI;
 	}
+	
 	return a;
 }
 

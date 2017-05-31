@@ -19,7 +19,7 @@ class Encoder
 		float y;
 		float angle;
         
-		const float unitsAxisWidth = 0.1102;
+		float unitsAxisWidth;
 		float radius;				// radius wheels in meters
 		float circumference;
 
