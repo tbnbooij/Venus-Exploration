@@ -2,6 +2,9 @@
 #include <Motion.h>
 const int robot = 1;
 
+int state;
+int state2;
+
 float angle_start;
 
 Encoder encoder(robot);
@@ -14,10 +17,9 @@ void setup() {
 	motion.setup();
   encoder.setup();
 
-  
-  motion.turnLeft();
-  angle_start = encoder.getAngle();
- 
+  delay(500);
+   angle_start = 0;
+   motion.turnLeft();
 }
 
 void loop() {

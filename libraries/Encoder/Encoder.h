@@ -15,11 +15,12 @@ class Encoder
 		int rightEncoderState;
 		int lastRightEncoderState;
 
-		float x;
-		float y;
-		float angle;
+		float x = 0;
+		float y = 0;
+		float angle = 0;
         
 		float unitsAxisWidth;
+		float angleErrorPercentage;
 		float radius;				// radius wheels in meters
 		float circumference;
 
