@@ -83,7 +83,15 @@ void Encoder::updateRelativePosition(int leftWheelStatus, int rightWheelStatus) 
 		y = y + rightDelta * sin(angle);
 	} else {
 		// rotating half the unitsAxisWidth with both encoders would be 2*PI
-		angle += (( abs(leftDelta) + abs(rightDelta) ) / unitsAxisWidth ) * angleErrorPercentage;
+		float deltaAngle = (( abs(leftDelta) + abs(rightDelta) ) / unitsAxisWidth ) * angleErrorPercentage;
+		
+		if(leftWheelStatus == 1 && rightWheelStatus == -1) {
+			angle -= deltaAngle;
+		} 
+		
+		if(leftWheelStatus == -1 && rightWheelStatus == 1) {
+			angle += deltaAngle;
+		}
 	}
 }
 
