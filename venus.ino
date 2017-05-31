@@ -1,17 +1,9 @@
-int state;
-int state2;
-
 void setup() {
-  Serial.begin(9600);
-    pinMode(7, INPUT);
+  // put your setup code here, to run once:
+
 }
 
 void loop() {
-  state = digitalRead(7);
-    if(state2 != state) {
-      if(state == HIGH) {
-        Serial.println(7);
-      }
-    }
-    state2 = state;  
+  // put your main code here, to run repeatedly:
+
 }

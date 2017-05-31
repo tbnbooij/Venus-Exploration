@@ -4,18 +4,16 @@
 
 Encoder::Encoder(int robot) {
 	if(robot == 1) {
-		pinLeft = 7;
-		pinRight = 8;
-		radius = 0.03435;
-		unitsAxisWidth = 0.1102;
+		
 		angleErrorPercentage = 1.05; // 1.0 would be no error
 	} else {
-		pinLeft = 7;
-		pinRight = 8;
-		radius = 0.034;
-		unitsAxisWidth = 0.1102;
 		angleErrorPercentage = 1;
 	}
+	
+	pinLeft = 7;
+	pinRight = 8;
+	radius = 0.03435;
+	unitsAxisWidth = 0.1102;
 }
 
 void Encoder::setup() {
