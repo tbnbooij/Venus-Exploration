@@ -42,14 +42,8 @@ class Motion
 		void stopDriving();
 		void openGrabber();
 		void closeGrabber();
-		void grabObject();
-		void dropObject();
 		int leftWheelStatus;
 		int rightWheelStatus;
-		
-		/*float startX;
-		float startY;
-		float distanceEncoder;*/
 };
 
 #endif
