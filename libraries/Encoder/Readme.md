@@ -18,9 +18,9 @@ Similar to the `checkDistanceDriven` method; returns true after the difference b
 Method which returns the current `x` coordinate. The variable itself cannot be edited directly, as it is private.
 ### float getY()
 Method which returns the current `y` coordinate. The variable itself cannot be edited directly, as it is declared private.
-### float getAngle();
+### float getAngle()
 Method which returns the current `angle` coordinate. The variable itself cannot be edited directly, as it is declared private. This angle will be mapped back between 0 and 2&pi; radians. (e.g. 3&pi; becomes &pi;)
-### float getRawAngle();
+### float getRawAngle()
 Method which returns the current `angle` coordinate. The variable itself cannot be edited directly, as it is declared private. The angle will *not* be mapped back. (e.g. 3&pi; will be returned as 3&pi;)
-### String test();
+### String test()
 Function which returns a String `"1"` to test the library as a whole.
