@@ -3,11 +3,10 @@ This library handles the two rotary encoders on the wheels (noticing the 8 holes
 ## Constructor
 Create a new "Encoder" instance with the following code:
 ```c++
-Encoder variableName = new Encoder(robot)
+Encoder variableName = new Encoder(1|2) // argument is the robot number
 ```
-; `robot` being the robot number (1/2)
 ## Methods
-### Setup
+### void setup()
 Call this function in the `setup()` of the main algorithm
 ### void updateRelativePosition(int leftWheelStatus, int rightWheelStatus)
 Call this function in the `loop()` to read the encoders and update the `x`, `y` and `angle` variables.
@@ -24,4 +23,4 @@ Method which returns the current `angle` coordinate. The variable itself cannot 
 ### float getRawAngle();
 Method which returns the current `angle` coordinate. The variable itself cannot be edited directly, as it is declared private. The angle will *not* be mapped back. (e.g. 3&pi; will be returned as 3&pi;)
 ### String test();
-Function which returns a String `1` to test the library as a whole.
+Function which returns a String `"1"` to test the library as a whole.

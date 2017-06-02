@@ -1,6 +1,6 @@
 #include <Encoder.h>
 #include <Motion.h>
-const int robot = 1;
+const int robot = 2;
 
 int state;
 int state2;
@@ -10,7 +10,7 @@ float angle_start;
 Encoder encoder(robot);
 Motion motion(robot);
 
-int d = 180;
+int d = 360;
 
 
 int i = 0;
