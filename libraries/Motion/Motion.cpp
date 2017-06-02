@@ -21,7 +21,7 @@ Motion::Motion(int robot) {
 void Motion::setup() {
 	servoUltrasound.attach(ultraSoundServo);
     servoUltrasound.write(75);
-    delay(initialSetupUltrasoundServo);
+	closeGrabber();
 }
 
 String Motion::test() {
@@ -134,17 +134,9 @@ void Motion::startDrivingBackwards() {
     servoRight.attach(servoRightPin); 
     servoLeft.writeMicroseconds(1300);         // Left wheel counterclockwise
     servoRight.writeMicroseconds(1700);        // Right wheel clockwise
-	leftWheelStatus = 1;
-	rightWheelStatus = 1;
+	leftWheelStatus = -1;
+	rightWheelStatus = -1;
 }
-
-/*void startDriving(float x, float y, float d) {
-	startDriving();
-	distanceEncoder = d;
-	startX = x;
-	startY = y;
-	
-}*/
 
 void Motion::stopDriving(){
     servoLeft.detach();
@@ -177,17 +169,4 @@ void Motion::closeGrabber(){
 		servoGrab.attach(servoGrabPin);
 		servoGrab.write(180);
 	}
-}
-
-void Motion::grabObject(){
-	openGrabber();
-	//Drive a certain distance
-	closeGrabber();	
-}
-
-void Motion::dropObject(){
-	openGrabber();
-	//backup a certain distance
-	closeGrabber();
-	
 }
