@@ -28,14 +28,24 @@ float Encoder::readLeftEncoder(int leftWheelStatus) {
 
 	leftEncoderState = digitalRead(pinLeft);
 	if(leftEncoderState != lastLeftEncoderState) {
+		// LOW for 6.5 out of 11.5, HIGH for 5 out of 11.5
 		if(leftEncoderState == HIGH) {
 			//rising trigger
 			if(leftWheelStatus == 1) {
-				leftDelta = circumference / 8;
+				leftDelta = circumference / 8 * (6.5 / 11.5);
 			}
 			
 			if(leftWheelStatus == -1) {
-				leftDelta = -circumference / 8;
+				leftDelta = -circumference / 8 * (6.5 / 11.5);
+			}
+		} else {
+			//rising trigger
+			if(leftWheelStatus == 1) {
+				leftDelta = circumference / 8 * (5 / 11.5);
+			}
+			
+			if(leftWheelStatus == -1) {
+				leftDelta = -circumference / 8 * (5 / 11.5);
 			}
 		}
 	}
@@ -48,15 +58,30 @@ float Encoder::readRightEncoder(int rightWheelStatus) {
 	float rightDelta = 0.0;
 	
 	rightEncoderState = digitalRead(pinRight);
+	if(rightEncoderState == HIGH) {
+		Serial.println(1);
+	} else {
+		Serial.println(0);
+	}
 	if(rightEncoderState != lastRightEncoderState) {
+		// LOW for 6.5 out of 11.5, HIGH for 5 out of 11.5
 		if(rightEncoderState == HIGH) {
-			//rising trigger
+			//rising trigger 
 			if(rightWheelStatus == 1) {
-				rightDelta = circumference / 8;
+				rightDelta = circumference / 8 * 6.5 / 11.5;
 			}
 			
 			if(rightWheelStatus == -1) {
-				rightDelta = -circumference / 8;
+				rightDelta = -circumference / 8 * 6.5 / 11.5;
+			}
+		} else {
+			//falling trigger
+			if(rightWheelStatus == 1) {
+				rightDelta = circumference / 8 * 5 / 11.5;
+			}
+			
+			if(rightWheelStatus == -1) {
+				rightDelta = -circumference / 8 * 5 / 11.5;
 			}
 		}
 	}
