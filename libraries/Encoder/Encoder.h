@@ -25,12 +25,13 @@ class Encoder
 		float circumference;
 
 		float boundAngle(float a);
+		
+		float readLeftEncoder(int leftWheelStatus);
+		float readRightEncoder(int rightWheelStatus);
 	public:
 		Encoder(int robot);
 		void setup();
         
-		float readLeftEncoder(int leftWheelStatus);
-		float readRightEncoder(int rightWheelStatus);
 		void updateRelativePosition(int leftWheelStatus, int rightWheelStatus);
 		boolean checkDistanceDriven(float xStart, float yStart, float distance);
 		boolean checkAngleTurned(float begin, float a, boolean increasing);

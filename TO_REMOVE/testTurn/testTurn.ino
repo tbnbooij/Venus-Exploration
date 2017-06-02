@@ -1,10 +1,17 @@
 #include <Encoder.h>
 #include <Motion.h>
-const int robot = 2;
+const int robot = 1;
 
+int state;
+int state2;
+
+float angle_start;
 
 Encoder encoder(robot);
 Motion motion(robot);
+
+int d = 180;
+
 
 int i = 0;
 
@@ -12,13 +19,16 @@ void setup() {
   Serial.begin(9600);
   motion.setup();
   encoder.setup();
+
   delay(500);
-  motion.startDriving();
+   motion.closeGrabber();
+   angle_start = 0;
+   motion.turnLeft();
 }
 
 void loop() {
   encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
-  if(encoder.checkDistanceDriven(0, 0, 1)) {
+  if(encoder.checkAngleTurned(angle_start, d*M_PI*2/360, true)) { // last argument is true when turning left and false when turning right
     motion.stopDriving();
   } else {
     Serial.print("x: ");
