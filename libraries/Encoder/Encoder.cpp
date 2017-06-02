@@ -4,16 +4,16 @@
 
 Encoder::Encoder(int robot) {
 	if(robot == 1) {
-		pinLeft = 7;
-		pinRight = 8;
-		radius = 0.03435;
-		unitsAxisWidth = 0.1102;
+		
+		angleErrorPercentage = 1.05; // 1.0 would be no error
 	} else {
-		pinLeft = 7;
-		pinRight = 8;
-		radius = 0.034;
-		unitsAxisWidth = 0.1102;
+		angleErrorPercentage = 1;
 	}
+	
+	pinLeft = 7;
+	pinRight = 8;
+	radius = 0.03435;
+	unitsAxisWidth = 0.1102;
 }
 
 void Encoder::setup() {
@@ -29,7 +29,6 @@ float Encoder::readLeftEncoder(int leftWheelStatus) {
 	leftEncoderState = digitalRead(pinLeft);
 	if(leftEncoderState != lastLeftEncoderState) {
 		if(leftEncoderState == HIGH) {
-			
 			//rising trigger
 			if(leftWheelStatus == 1) {
 				leftDelta = circumference / 8;
@@ -52,7 +51,6 @@ float Encoder::readRightEncoder(int rightWheelStatus) {
 	if(rightEncoderState != lastRightEncoderState) {
 		if(rightEncoderState == HIGH) {
 			//rising trigger
-			
 			if(rightWheelStatus == 1) {
 				rightDelta = circumference / 8;
 			}
@@ -67,23 +65,32 @@ float Encoder::readRightEncoder(int rightWheelStatus) {
 }
 
 void Encoder::updateRelativePosition(int leftWheelStatus, int rightWheelStatus) {
-		float leftDelta = readLeftEncoder(leftWheelStatus);
-		float rightDelta = readRightEncoder(rightWheelStatus);
+	
+	float leftDelta = readLeftEncoder(leftWheelStatus);
+	float rightDelta = readRightEncoder(rightWheelStatus);
+	
+	if(leftDelta == 0 && rightDelta == 0) {
+		return;
+	}
 
-		// leftDelta and rightDelta = distance that the left and right wheel have moved along
-		//  the ground
-		// https://robotics.stackexchange.com/questions/1653/calculate-position-of-differential-drive-robot
-		if (fabs(leftDelta - rightDelta) < 1.0e-6) { // basically going straight
-			x = x + leftDelta * cos(angle);
-			y = y + rightDelta * sin(angle);
-		} else {
-			float R = unitsAxisWidth * (leftDelta + rightDelta) / (2 * (rightDelta - leftDelta));
-			float wd = (rightDelta - leftDelta) / unitsAxisWidth;
-
-			x = x + R * sin(wd + angle) - R * sin(angle);
-			y = y - R * cos(wd + angle) + R * cos(angle);
-			angle = angle + wd;
+	// leftDelta and rightDelta = distance that the left and right wheel have moved along
+	//  the ground
+	// https://robotics.stackexchange.com/questions/1653/calculate-position-of-differential-drive-robot
+	if (leftWheelStatus == 1 && rightWheelStatus == 1) { // Going straight
+		x = x + leftDelta * cos(angle);
+		y = y + rightDelta * sin(angle);
+	} else {
+		// rotating half the unitsAxisWidth with both encoders would be 2*PI
+		float deltaAngle = (( abs(leftDelta) + abs(rightDelta) ) / unitsAxisWidth ) * angleErrorPercentage;
+		
+		if(leftWheelStatus == 1 && rightWheelStatus == -1) {
+			angle -= deltaAngle;
+		} 
+		
+		if(leftWheelStatus == -1 && rightWheelStatus == 1) {
+			angle += deltaAngle;
 		}
+	}
 }
 
 boolean Encoder::checkDistanceDriven(float xStart, float yStart, float distance) {
