@@ -4,7 +4,10 @@ This library handles the two rotary encoders on the wheels (noticing the 8 holes
 Create a new "Encoder" instance with the following code:
 ```c++
 Encoder variableName(1|2) // argument is the robot number
-String t = variableName.[test()](#string-test) // t == "1" 
+```
+Now the class can be used the following way, with the test function[test function](#string-test):
+```c++
+String t = variableName.test(); // t == "1" 
 ```
 ## Methods
 ### void setup()
