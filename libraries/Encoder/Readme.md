@@ -5,7 +5,7 @@ Create a new "Encoder" instance with the following code:
 ```c++
 Encoder variableName(1|2) // argument is the robot number
 ```
-Now the class can be used the following way, with the test function[test function](#string-test):
+Now the class can be used the following way, with the [test function](#string-test):
 ```c++
 String t = variableName.test(); // t == "1" 
 ```
