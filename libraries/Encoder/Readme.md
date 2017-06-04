@@ -3,7 +3,7 @@ This library handles the two rotary encoders on the wheels (noticing the 8 holes
 ## Constructor
 Create a new "Encoder" instance with the following code:
 ```c++
-Encoder variableName = new Encoder(1|2) // argument is the robot number
+Encoder variableName(1|2) // argument is the robot number
 ```
 ## Methods
 ### void setup()
