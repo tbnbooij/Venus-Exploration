@@ -20,7 +20,7 @@ Motion::Motion(int robot) {
 
 void Motion::setup() {
 	servoUltrasound.attach(ultraSoundServo);
-    servoUltrasound.write(75);
+    servoUltrasound.write(degreeRight);
 	closeGrabber();
 }
 
@@ -29,18 +29,34 @@ String Motion::test() {
 }
 
 int Motion::measureUltrasound(){
-  
-    for (int i=degreeRight; i<degreeLeft; i=i+1){    
-		servoUltrasound.attach(ultraSoundServo);
-		servoUltrasound.write(i);
-		delay(ultraServoDelay);
-
-		// Make something that turns right after detecting on the left and vice versa!!
-		if(measurement()< maxDistance){
-			return i;
+	if(ultrasoundGoingLeft == 1) {
+		if(ultrasoundAngle < degreeLeft) {
+			ultrasoundAngle++;
+		} else {
+			ultrasoundGoingLeft = 0;
 		}
-    }
-    return -1;
+	} else {
+		if(ultrasoundAngle > degreeRight) {
+			ultrasoundAngle--;
+		} else {
+			ultrasoundGoingLeft = 1;
+		}
+	}
+
+	
+
+	servoUltrasound.write(ultrasoundAngle);
+	delay(ultraServoDelay);
+	
+
+
+	// Make something that turns right after detecting on the left and vice versa!!
+	if(measurement()< maxDistance){
+		return ultrasoundAngle;
+	} else {
+		return -1;
+	}
+	
 }
 
 

@@ -14,9 +14,7 @@ void setup() {
 
 void loop() {
 
-  motion.measurement();
-
-  /*motion.grabObject();*/
+  Serial.println("hoi");
     
    /*while(test == 1){ 
     motion.closeGrabber();
@@ -43,7 +41,7 @@ void loop() {
 
   /*float x = encoder.getX();
   float y = encoder.getY();
-  float distance = 0.10
+  float distance = 0.10 
   motion.startDriving(x, y, distance);
 
   if( encoder.checkDistanceDriven(motion.startX, motion.startY, motion.distance ) {
@@ -52,11 +50,11 @@ void loop() {
     delay(2000);
   }*/
 
-  
-  
-  /*int obstacle = motion.measureUltrasound();
+
+ 
+  int obstacle = motion.measureUltrasound();
   if(obstacle == -1){  
     motion.startDriving();
   }
-  else {motion.turnAfterObstacle(obstacle);}*/
+  else {motion.turnAfterObstacle(obstacle);}
 }

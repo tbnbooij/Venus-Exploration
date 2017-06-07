@@ -24,8 +24,9 @@ class Motion
 		int servoRightPin;      		            // Pin for right servo wheel
 		int degreeRight = 20;	                    // Amount of degrees on the left side of the ultrasound sensor
 		int degreeLeft = 110;                       // Amount of degrees on the right side of the ultrasound sensor
-		int ultraServoDelay = 6;                    // Time the ultrasound servo needs to turn before meassuring can start again
+		int ultraServoDelay = 7;                    // Time the ultrasound servo needs to turn before meassuring can start again
 		int servoGrabPin;
+		int ultrasoundGoingLeft = 1;
 	public:
 		Motion(int robot);
 		void setup();
@@ -44,6 +45,7 @@ class Motion
 		void closeGrabber();
 		int leftWheelStatus;
 		int rightWheelStatus;
+		int ultrasoundAngle = 20;
 };
 
 #endif
