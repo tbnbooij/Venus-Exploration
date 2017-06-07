@@ -28,6 +28,37 @@ String Motion::test() {
 	return "1";
 }
 
+void Motion::positionWall(){
+	int m;
+	if(firstPositioningWall == true) {
+		ultrasoundAngle = 0;
+		servoUltrasound.write(ultrasoundAngle);
+		delay(200);
+		
+		m = measurement();
+		
+		measurementRef = m;
+	} else {
+		servoUltrasound.write(ultrasoundAngle);
+		delay(200);
+		m = measurement();
+	}
+	
+	firstPositioningWall = false;
+	if(m > measurementRef){
+		closedAngleWall = ultrasoundAngle-1;
+		turnLeftSlow();
+		firstPositioningWall = true;
+		
+		
+	}
+	else {
+		measurementRef = m;
+		ultrasoundAngle++;
+	}
+	
+}
+
 int Motion::measureUltrasound(){
 	if(ultrasoundGoingLeft == 1) {
 		if(ultrasoundAngle < degreeLeft) {
@@ -123,6 +154,15 @@ void Motion::turnLeft() {
     servoRight.attach(servoRightPin);
 	servoLeft.writeMicroseconds(1300);         
     servoRight.writeMicroseconds(1300);
+	leftWheelStatus = -1;
+	rightWheelStatus = 1;
+}
+
+void Motion::turnLeftSlow() {
+	servoLeft.attach(servoLeftPin);                     
+    servoRight.attach(servoRightPin);
+	servoLeft.writeMicroseconds(1499);         
+    servoRight.writeMicroseconds(1499);
 	leftWheelStatus = -1;
 	rightWheelStatus = 1;
 }

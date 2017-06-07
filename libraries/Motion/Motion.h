@@ -27,6 +27,10 @@ class Motion
 		int ultraServoDelay = 7;                    // Time the ultrasound servo needs to turn before meassuring can start again
 		int servoGrabPin;
 		int ultrasoundGoingLeft = 1;
+		int measurementRef = 0;
+		boolean firstPositioningWall = true;
+		int closedAngleWall = 0;
+
 	public:
 		Motion(int robot);
 		void setup();
@@ -45,6 +49,7 @@ class Motion
 		void closeGrabber();
 		int leftWheelStatus;
 		int rightWheelStatus;
+		void positionWall();
 		int ultrasoundAngle = 20;
 };
 
