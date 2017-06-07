@@ -12,10 +12,7 @@ void setup() {
   motion.setup();
 }
 
-void loop() {
-
-  Serial.println("hoi");
-    
+void loop() {    
    /*while(test == 1){ 
     motion.closeGrabber();
     delay(1000);
