@@ -118,26 +118,47 @@ void Encoder::updateRelativePosition(int leftWheelStatus, int rightWheelStatus) 
 	}
 }
 
-boolean Encoder::checkDistanceDriven(float xStart, float yStart, float distance) {
-	if(distance > 0) { // set when starting driving
-		return sqrt(pow(x-xStart, 2)+pow(y-yStart,2)) >= distance;
+boolean Encoder::checkDistanceDriven(float distance) {
+	if(distanceToBeDriven != distance) {
+		xStart = x;
+		yStart = y;
+		distanceToBeDriven = distance;
 	}
+	
+	boolean b = sqrt(pow(x-xStart, 2)+pow(y-yStart,2)) >= abs(distance);
+	
+	if(b) {
+		distanceToBeDriven = 0;
+	}
+	return b;
 }
 
-boolean Encoder::checkAngleTurned(float begin, float a, boolean increasing) {
-	if(increasing) {
-		return begin + a <= angle;
-	} else {
-		return begin - a >= angle;
+boolean Encoder::checkAngleTurned(float a) {
+	if(angleToBeTurned != a) {
+		angleStart = angle;
+		angleToBeTurned = a;
 	}
+	
+	boolean b = false;
+	
+	if(a > 0) {
+		b = begin + a <= angle;
+	} else {
+		b = begin - a >= angle;
+	}
+	
+	if(b) {
+		angleToBeTurned = 0;
+	}
+	return b;
 }
 
 float Encoder::boundAngle(float a) {
-	while(a < 0) {
+	while(a <= -1*M_PI) {
 		a += 2*M_PI;
 	}
 
-	while(a > 2*M_PI) {
+	while(a > M_PI) {
 		a -= 2* M_PI;
 	}
 	
