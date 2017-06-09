@@ -9,12 +9,19 @@ Motion::Motion(int robot) {
 		servoLeftPin = 13; //robot 1:13 robot 2:12
 		servoRightPin = 12; //robot 1:12 robot 2:13
 		servoGrabPin = 11; //robot 1:11 robot 2:10
+		normal = 74;
+		degreeRight = normal - deviationNormal;
+		degreeLeft = normal + deviationNormal;
 	} else if(robot == 2) {
 		pingPin = 9; //robot 1:9 robot 2:9
 		ultraSoundServo = 11; //robot 1:10 robot 2:11
 		servoLeftPin = 12; //robot 1:13 robot 2:12
 		servoRightPin = 13; //robot 1:12 robot 2:13
 		servoGrabPin = 10; //robot 1:11 robot 2:10
+		normal = 84;
+		degreeRight = normal - deviationNormal;
+		degreeLeft = normal + deviationNormal;
+		
 	}
 }
 
@@ -141,13 +148,13 @@ float Motion::microsecondsToCentimeters(float microseconds) {
 void Motion::turnAfterObstacle(int angle){
     servoLeft.attach(servoLeftPin);                     
     servoRight.attach(servoRightPin); 
-    if (angle > 75 ){
+    if (angle > normal ){
       servoLeft.writeMicroseconds(1700);         
       servoRight.writeMicroseconds(1700);
 	  leftWheelStatus = 1;
 	  rightWheelStatus = -1;
     }
-    if (angle <= 75 ){
+    if (angle <= normal ){
       servoLeft.writeMicroseconds(1300);         
       servoRight.writeMicroseconds(1300);
 	  leftWheelStatus = -1;
