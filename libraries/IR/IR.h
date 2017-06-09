@@ -19,4 +19,6 @@ class IR
 		IR(int robot);
 		
 		
-}
+};
+
+#endif
