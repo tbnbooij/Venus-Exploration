@@ -36,7 +36,7 @@ class IR
 		void selectChannel(int channel);
 		float findAngleRockRobot(int rockChannel);
 		void setup();
-		
+		int readLineSensor();
 		
 		
 };
