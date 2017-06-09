@@ -145,23 +145,23 @@ float IR::findAngleRockRobot(int rockChannel){
 int IR::readLineSensor(){
   int stateLeft = analogRead(sensorPinline1);
   int stateRight = analogRead(sensorPinline2);
-  int thing;
+  int lineDetectionStatus;
     
   if (stateLeft < threshold && stateRight > threshold){
-    thing = 1;
+    lineDetectionStatus = 1;
   }
   //right sensor sees tape
   if (stateRight < threshold && stateLeft > threshold){
-    thing = 2;
+    lineDetectionStatus = 2;
   }
   //bot see tape
   if(stateRight < threshold && stateLeft < threshold){
-    thing = 3;
+    lineDetectionStatus = 3;
   }
   //no sensor sees tape
   if (stateLeft > threshold && stateRight > threshold){
-    thing = 0;
+    lineDetectionStatus = 0;
   }
   
-  return thing;
+  return lineDetectionStatus;
 } 
