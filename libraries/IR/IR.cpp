@@ -130,24 +130,24 @@ void IR::angleRockRobot{
 int IR::readLineSensor(){
   int stateLeft = analogRead(sensorPinline1);
   int stateRight = analogRead(sensorPinline2);
-  int thing;
+  int status;
     
   if (stateLeft < threshold && stateRight > threshold){
-    thing = 1;
+    status = 1;
   }
   //right sensor sees tape
   if (stateRight < threshold && stateLeft > threshold){
-    thing = 2;
+    status = 2;
   }
   //bot see tape
   if(stateRight < threshold && stateLeft < threshold){
-    thing = 3;
+    status = 3;
   }
   //no sensor sees tape
   if (stateLeft > threshold && stateRight > threshold){
-    thing = 0;
+    status = 0;
   }
   
-  return thing;
+  return status;
 } 
 
