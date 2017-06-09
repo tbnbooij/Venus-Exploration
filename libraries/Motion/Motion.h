@@ -22,7 +22,7 @@ class Motion
 		int initialSetupUltrasoundServo = 100;      // Amount of time needed to return ultrasound servo to the initial position
 		int servoLeftPin;		                    // Pin for left servo wheel
 		int servoRightPin;      		            // Pin for right servo wheel
-		int degreeRight = 20;	                    // Amount of degrees on the left side of the ultrasound sensor
+		int degreeRight = 40;	                    // Amount of degrees on the left side of the ultrasound sensor
 		int degreeLeft = 110;                       // Amount of degrees on the right side of the ultrasound sensor
 		int ultraServoDelay = 7;                    // Time the ultrasound servo needs to turn before meassuring can start again
 		int servoGrabPin;
@@ -49,7 +49,7 @@ class Motion
 		void closeGrabber();
 		int leftWheelStatus;
 		int rightWheelStatus;
-		void positionWall();
+		int positionWall();
 		int ultrasoundAngle = 20;
 };
 
