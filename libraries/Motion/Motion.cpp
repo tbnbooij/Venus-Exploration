@@ -22,6 +22,7 @@ void Motion::setup() {
 	servoUltrasound.attach(ultraSoundServo);
     servoUltrasound.write(degreeRight);
 	closeGrabber();
+	
 }
 
 String Motion::test() {
@@ -77,6 +78,9 @@ int Motion::measureUltrasound(){
 			ultrasoundGoingLeft = 1;
 		}
 	}
+	
+	Serial.println(ultrasoundAngle);
+	
 
 	
 
@@ -174,8 +178,8 @@ void Motion::turnRight() {
 void Motion::startDriving() {
 	servoLeft.attach(servoLeftPin);                     
     servoRight.attach(servoRightPin); 
-    servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
-    servoRight.writeMicroseconds(1300);        // Right wheel clockwise
+    servoLeft.writeMicroseconds(1600);         // Left wheel counterclockwise
+    servoRight.writeMicroseconds(1400);        // Right wheel clockwise
 	leftWheelStatus = 1;
 	rightWheelStatus = 1;
 }
