@@ -30,7 +30,6 @@ class IR
 
 		
 		int threshold = 180;
-		int thing = 0;
 	public:
 		IR(int robot);
 		void selectChannel(int channel);
