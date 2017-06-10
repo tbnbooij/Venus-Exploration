@@ -10,7 +10,7 @@
 
 #include <Encoder.h> 
 #include <Motion.h> 
-#include <Wireless.h> 
+//#include <Wireless.h> 
 #include <IR.h>
 
 const int robot = 1;
@@ -18,20 +18,20 @@ int robotStatus = 0;
 
 Encoder encoder(robot); 
 Motion motion(robot); 
-Wireless wireless(robot); 
-Beacon beacon(); 
-IR ir();
+//Wireless wireless(robot); 
+//Beacon beacon; 
+IR ir(robot);
 
 void setup() {
   Serial.begin(9600); 
   motion.setup(); 
   encoder.setup(); 
-  wireless.setup(); 
+  //wireless.setup(); 
   ir.setup(); 
 }
 
 void loop() {
-  encoder.updateRelativePosition();
+  encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
 
   if(robotStatus == 2) {
     // turn towards lab
@@ -39,7 +39,7 @@ void loop() {
 
     // turn towards lab
     float encoderAngle = encoder.getAngle();
-    float requiredAngle = encoder.boundAngle(encoder.M_PI - atan(encoder.getY() / encoder.getX()));
+    float requiredAngle = encoder.boundAngle(M_PI - atan(encoder.getY() / encoder.getX()));
 
     float turnAngle = encoder.boundAngle(2*M_PI - requiredAngle - encoderAngle);
     
@@ -56,7 +56,7 @@ void loop() {
   }
 
   if(robotStatus == 3) {
-    if(detectHillAndTurn() {
+    if( detectHillAndTurn() ) {
       // Find beacon
     }
     
@@ -78,7 +78,7 @@ boolean detectHillAndTurn() {
     return true;
   } else {
     // there is something in the way, turn away from it
-    motion.turnAfterObstacle(utrasoundAngle);
+    motion.turnAfterObstacle(ultrasoundAngle);
     if(robotStatus == 3) {
       robotStatus = 2;
     }

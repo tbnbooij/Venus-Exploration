@@ -142,9 +142,9 @@ boolean Encoder::checkAngleTurned(float a) {
 	boolean b = false;
 	
 	if(a > 0) {
-		b = begin + a <= angle;
+		b = angleStart + a <= angle;
 	} else {
-		b = begin - a >= angle;
+		b = angleStart - a >= angle;
 	}
 	
 	if(b) {
