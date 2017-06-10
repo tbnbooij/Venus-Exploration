@@ -2,19 +2,19 @@
 #define Beacon_h
 
 #include "Arduino.h"
-#include "Servo.h"
 
 class Beacon
 {
 	private:
-    int angle;
-    int normal;
-    int USServo;
-    int intDelay;
-    Servo s;
+    uint8_t LDRPin;
+    short rAve[3];
+    uint8_t iterator = 0;
+    short maxVal[2] = {0};
 	public:
-    Beacon(int _normal, int _angle);
-    int sweep();
+    Beacon(uint8_t pin);
+    void start();
+    void measure();
+    int stop();
 };
 
 #endif
