@@ -24,7 +24,7 @@ void setup() {
 }
 
 void loop() {
-  int turnOrNot = motion.measureUltrasound();
+  /*int turnOrNot = motion.measureUltrasound();
   if (turnOrNot < 0 && line == 0){
     motion.startDriving();   
   }
@@ -32,7 +32,7 @@ void loop() {
     
     motion.turnAfterObstacle(turnOrNot);
     
-    }
+    }*/
 
 
   int Stateleft = analogRead(sensorPinline1);
@@ -62,19 +62,19 @@ void loop() {
       line = 1;
       motion.stopDriving();
       motion.turnLeft();
-      delay(10);
+      delay(1000);
     }
     else if (thing == 2){
             motion.stopDriving();
             line = 1;
 
       motion.turnRight();
-      delay(10);
+      delay(1000);
     }
     else if (thing == 0){
       line = 0;
       }
-    
+    Serial.println(Stateleft);
     
 
   
