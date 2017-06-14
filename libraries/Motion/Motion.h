@@ -24,7 +24,6 @@ class Motion
 		int servoRightPin;      		            // Pin for right servo wheel
 		int ultraServoDelay = 7;                    // Time the ultrasound servo needs to turn before meassuring can start again
 		int servoGrabPin;
-		int ultrasoundGoingLeft = 1;
 		int measurementRef = 0;
 		boolean firstPositioningWall = true;
 		int closedAngleWall = 0;
@@ -37,6 +36,7 @@ class Motion
 		String test();
 		int degreeRight = 50;	                    // Amount of degrees on the left side of the ultrasound sensor
 		int degreeLeft = 110;                       // Amount of degrees on the right side of the ultrasound sensor
+		int ultrasoundGoingLeft = 1;
 		
 		int measureUltrasound();
 		float measurement();
