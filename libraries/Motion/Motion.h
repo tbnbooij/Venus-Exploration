@@ -34,8 +34,8 @@ class Motion
 		Motion(int robot);
 		void setup();
 		String test();
-		int degreeRight = 50;	                    // Amount of degrees on the left side of the ultrasound sensor
-		int degreeLeft = 110;                       // Amount of degrees on the right side of the ultrasound sensor
+		int degreeRight;	                    // Amount of degrees on the left side of the ultrasound sensor
+		int degreeLeft;                       // Amount of degrees on the right side of the ultrasound sensor
 		int ultrasoundGoingLeft = 1;
 		
 		int measureUltrasound();
@@ -52,7 +52,7 @@ class Motion
 		int leftWheelStatus;
 		int rightWheelStatus;
 		int positionWall();
-		int ultrasoundAngle = 20;
+		int ultrasoundAngle;
 };
 
 #endif
