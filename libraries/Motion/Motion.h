@@ -22,8 +22,6 @@ class Motion
 		int initialSetupUltrasoundServo = 100;      // Amount of time needed to return ultrasound servo to the initial position
 		int servoLeftPin;		                    // Pin for left servo wheel
 		int servoRightPin;      		            // Pin for right servo wheel
-		int degreeRight = 50;	                    // Amount of degrees on the left side of the ultrasound sensor
-		int degreeLeft = 110;                       // Amount of degrees on the right side of the ultrasound sensor
 		int ultraServoDelay = 7;                    // Time the ultrasound servo needs to turn before meassuring can start again
 		int servoGrabPin;
 		int ultrasoundGoingLeft = 1;
@@ -37,6 +35,8 @@ class Motion
 		Motion(int robot);
 		void setup();
 		String test();
+		int degreeRight = 50;	                    // Amount of degrees on the left side of the ultrasound sensor
+		int degreeLeft = 110;                       // Amount of degrees on the right side of the ultrasound sensor
 		
 		int measureUltrasound();
 		float measurement();
