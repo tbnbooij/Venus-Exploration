@@ -22,11 +22,9 @@ class IR
 		int rockSensor5Value=0;
 		int rockSensorValueValidated = 0;
 		int rockSensorValue = 0;
-		int rockSensorThresholdValue = 80;
+		int rockSensorThresholdValue = 220;
 		int maxRockSensorValue = 120;
 		int minRockSensorValue = 1000;
-		
-		int readRockSensor();
 
 		
 		int threshold = 180;
@@ -37,7 +35,7 @@ class IR
 		void setup();
 		int readLineSensor();
 		
-		
+		int readRockSensor();
 };
 
 #endif

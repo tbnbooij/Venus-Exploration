@@ -12,6 +12,7 @@ int t = 0;
 
 void setup(){
   ir.setup();
+  encoder.setup();
   Serial.begin(9600);
   }
 void loop(){
@@ -19,31 +20,37 @@ void loop(){
   switch(t) {
     case 0:
       rockChannel=ir.readRockSensor();
+      Serial.print("Channel found: ");
+      Serial.println(rockChannel);
   
       if(rockChannel > 0) {
         t = 1;
-        anglereturn=ir.findAngleRockRobot(rockChannel);
-        anglereturn=(anglereturn/360)*2*M_PI;
-        Serial.print("Angle: ");
+        anglereturn=-1*ir.findAngleRockRobot(rockChannel);
+        Serial.print("Angle (degree): ");
         Serial.println(anglereturn);
+        anglereturn=(anglereturn/360)*2*M_PI;
+        if(anglereturn>0){
+          motion.turnLeft();
+        }
+        if(anglereturn<0){
+          motion.turnRight();
+        }
       }
       break;
 
     case 1:
-      if(encoder.checkAngleTurned(-1*anglereturn)) {
+      if(encoder.checkAngleTurned(anglereturn)) {
         motion.stopDriving();
         t = 2;
-      } else {
-        if(anglereturn<0){
-          motion.turnLeft();
-        }
-        if(anglereturn>0){
-          motion.turnRight();
-        }
       }
       break;
   }
 
   Serial.print("Status: ");
   Serial.println(t);
+  rockChannel=ir.readRockSensor();
+  
+  Serial.println("----------");
+  delay(500);
+
 }

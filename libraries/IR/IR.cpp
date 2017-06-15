@@ -35,7 +35,7 @@ int IR::readRockSensor(){
   rockSensorValueHighest=0;
   for(channel=1;channel<=8;channel++){
     selectChannel(channel);
-    delay(10);
+	delay(10);
     //read analog value and update store max
       rockSensorValue=analogRead(sensorPin);
       //Serial.println(rockSensorValue);
@@ -44,10 +44,17 @@ int IR::readRockSensor(){
       if (rockSensorValue>rockSensorValueHighest){
         rockSensorValueHighest=rockSensorValue;
         rockChannel=channel;
-      } 
+      }
+	  
+	   if(channel == 1) {
+	  Serial.print("1: ");
+	  Serial.println(rockSensorValue);
   }
+  }
+ 
+  
   //check if valid
-  if(rockSensorValueHighest>=rockSensorThresholdValue){
+  if(rockSensorValueHighest>=rockSensorThresholdValue) {
     rockSensorValueValidated=rockSensorValue; //update sensor value
   }else{
     rockChannel=0;
@@ -59,42 +66,42 @@ void IR::selectChannel(int channel){
 
     //select channel
       switch(channel){
-        case 2:
+        case 1:
           digitalWrite(selectPin1,LOW);
           digitalWrite(selectPin2,LOW);
           digitalWrite(selectPin3,LOW);
           break;
-        case 3:
+        case 2:
           digitalWrite(selectPin1,LOW);
           digitalWrite(selectPin2,LOW);
           digitalWrite(selectPin3,HIGH);
+          break;
+        case 3:
+          digitalWrite(selectPin1,LOW);
+          digitalWrite(selectPin2,HIGH);
+          digitalWrite(selectPin3,LOW);
           break;
         case 4:
           digitalWrite(selectPin1,LOW);
           digitalWrite(selectPin2,HIGH);
-          digitalWrite(selectPin3,LOW);
+          digitalWrite(selectPin3,HIGH);
           break;
         case 5:
-          digitalWrite(selectPin1,LOW);
-          digitalWrite(selectPin2,HIGH);
-          digitalWrite(selectPin3,HIGH);
+          digitalWrite(selectPin1,HIGH);
+          digitalWrite(selectPin2,LOW);
+          digitalWrite(selectPin3,LOW);
           break;
         case 6:
           digitalWrite(selectPin1,HIGH);
           digitalWrite(selectPin2,LOW);
-          digitalWrite(selectPin3,LOW);
-          break;
-        case 7:
-          digitalWrite(selectPin1,HIGH);
-          digitalWrite(selectPin2,LOW);
           digitalWrite(selectPin3,HIGH);
           break;
-        case 8:
+        case 7:
           digitalWrite(selectPin1,HIGH);
           digitalWrite(selectPin2,HIGH);
           digitalWrite(selectPin3,LOW);
           break;
-        case 1:
+        case 8:
           digitalWrite(selectPin1,HIGH);
           digitalWrite(selectPin2,HIGH);
           digitalWrite(selectPin3,HIGH);
