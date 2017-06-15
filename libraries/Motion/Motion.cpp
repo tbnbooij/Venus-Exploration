@@ -10,8 +10,6 @@ Motion::Motion(int robot) {
 		servoRightPin = 12; //robot 1:12 robot 2:13
 		servoGrabPin = 11; //robot 1:11 robot 2:10
 		normal = 74;
-		degreeRight = normal - deviationNormal;
-		degreeLeft = normal + deviationNormal;
 	} else if(robot == 2) {
 		pingPin = 9; //robot 1:9 robot 2:9
 		ultraSoundServo = 11; //robot 1:10 robot 2:11
@@ -19,15 +17,16 @@ Motion::Motion(int robot) {
 		servoRightPin = 13; //robot 1:12 robot 2:13
 		servoGrabPin = 10; //robot 1:11 robot 2:10
 		normal = 84;
-		degreeRight = normal - deviationNormal;
-		degreeLeft = normal + deviationNormal;
-		
 	}
+	
+	degreeRight = normal - deviationNormal;
+	degreeLeft = normal + deviationNormal;
 }
 
 void Motion::setup() {
 	servoUltrasound.attach(ultraSoundServo);
-    servoUltrasound.write(degreeRight);
+	ultrasoundAngle = degreeRight;
+    servoUltrasound.write(ultrasoundAngle);
 	closeGrabber();
 	
 }
@@ -71,25 +70,23 @@ int Motion::positionWall(){
 	
 }
 
-int Motion::measureUltrasound(){
+int Motion::measureUltrasound() {
 	if(ultrasoundGoingLeft == 1) {
 		if(ultrasoundAngle < degreeLeft) {
 			ultrasoundAngle++;
 		} else {
 			ultrasoundGoingLeft = 0;
+			ultrasoundAngle--;
+
 		}
 	} else {
 		if(ultrasoundAngle > degreeRight) {
 			ultrasoundAngle--;
 		} else {
 			ultrasoundGoingLeft = 1;
+			ultrasoundAngle++;
 		}
 	}
-	
-	Serial.println(ultrasoundAngle);
-	
-
-	
 
 	servoUltrasound.write(ultrasoundAngle);
 	delay(ultraServoDelay);
@@ -129,10 +126,6 @@ float Motion::measurement(){
   duration = pulseIn(pingPin, HIGH);
 
   // convert the time into a distance
-  
-  Serial.print(microsecondsToCentimeters(duration));
-  Serial.print("cm");
-  Serial.println();
 
   return microsecondsToCentimeters(duration);
   
@@ -185,8 +178,8 @@ void Motion::turnRight() {
 void Motion::startDriving() {
 	servoLeft.attach(servoLeftPin);                     
     servoRight.attach(servoRightPin); 
-    servoLeft.writeMicroseconds(1600);         // Left wheel counterclockwise
-    servoRight.writeMicroseconds(1400);        // Right wheel clockwise
+    servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
+    servoRight.writeMicroseconds(1300);        // Right wheel clockwise
 	leftWheelStatus = 1;
 	rightWheelStatus = 1;
 }

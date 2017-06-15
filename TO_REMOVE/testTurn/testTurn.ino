@@ -1,6 +1,6 @@
 #include <Encoder.h>
 #include <Motion.h>
-const int robot = 2;
+const int robot = 1;
 
 int state;
 int state2;
@@ -28,7 +28,7 @@ void setup() {
 
 void loop() {
   encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
-  if(encoder.checkAngleTurned(angle_start, d*M_PI*2/360, true)) { // last argument is true when turning left and false when turning right
+  if(encoder.checkAngleTurned(d*M_PI*2/360)) {
     motion.stopDriving();
   } else {
     Serial.print("x: ");
