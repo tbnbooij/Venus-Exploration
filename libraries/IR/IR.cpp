@@ -58,6 +58,11 @@ int IR::readRockSensor(){
   }else{
     rockChannel=0;
   }
+  
+  Serial.print("(Highest: ");
+  Serial.print(rockChannel);
+  Serial.println(")");
+  
   return(rockChannel);
 
 }
