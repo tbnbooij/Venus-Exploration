@@ -1,5 +1,6 @@
 #include "Beacon.h"
 #include "Arduino.h"
+#include "Servo.h"
 
 Beacon::Beacon(uint8_t pin) {
   LDRPin = pin;
@@ -7,35 +8,46 @@ Beacon::Beacon(uint8_t pin) {
 }
 
 void Beacon::start() {
-  rAve[3] = {0};
-  iterator = 0;
+  rAve[ROLL_AVE_SIZE] = {0};
   maxVal[2] = {0};
 }
 
-void Beacon::measure() {
-  rAve[iterator % 3] = (short) analogRead(LDRPin);
+void Beacon::measure(int angle, int left, int right, Servo servo, bool demo) {
+  rAve[angle % ROLL_AVE_SIZE] = (short) analogRead(LDRPin);
   short newAve = 0;
-  for(uint8_t i = 0; i < 3; i++) {
+  for(uint8_t i = 0; i < ROLL_AVE_SIZE; i++) {
     newAve += rAve[i];
   }
-  newAve /= 3;
+  newAve /= ROLL_AVE_SIZE;
+  Serial.println(newAve);
   if(newAve > maxVal[0]) {
     maxVal[0] = newAve;
-    maxVal[1] = iterator;
+    maxVal[1] = angle;
   }
-  iterator++;
-}
 
-int Beacon::stop() {
-  uint8_t end = iterator - 1;
-  float ratio = ((float) iterator)/((float) end);
-  if(ratio == 0.5) {
-    return 0;
-  }
-  else if (ratio > 0.5) {
-    return 1;
-  }
-  else {
-    return -1;
+  if(angle == left || angle == right) {
+    float ratio = ((float) (maxVal[1] - right))/((float) (left-right));
+    /*
+    if(ratio == 0.5) {
+      Serial.println("RIGHT IN FRONT OF IT!");
+    }
+    else if (ratio < 0.5) {
+      Serial.println("TO THE RIGHT!");
+    }
+    else {
+      Serial.println("TO THE LEFT!");
+    }*/
+    if(demo) {
+      servo.write(maxVal[1]);
+      delay(2000);
+      if(angle == left) {
+        servo.write(left);
+      }
+      else {
+        servo.write(right);
+      }
+      delay(1000);
+    }
+    start();
   }
 }

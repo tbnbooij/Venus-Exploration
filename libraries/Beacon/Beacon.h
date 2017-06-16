@@ -1,20 +1,20 @@
 #ifndef Beacon_h
 #define Beacon_h
+#define ROLL_AVE_SIZE 10
 
 #include "Arduino.h"
+#include "Servo.h"
 
 class Beacon
 {
 	private:
-    uint8_t LDRPin;
-    short rAve[3];
-    uint8_t iterator = 0;
-    short maxVal[2] = {0};
+    		uint8_t LDRPin;
+    		short rAve[ROLL_AVE_SIZE];
 	public:
-    Beacon(uint8_t pin);
-    void start();
-    void measure();
-    int stop();
+    		Beacon(uint8_t pin);
+    		void start();
+		short maxVal[2] = {0};
+    		void measure(int angle, int left, int right, Servo servo, bool demo);
 };
 
 #endif
