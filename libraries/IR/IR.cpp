@@ -5,8 +5,8 @@ IR::IR(int robot) {
 	if(robot == 1) {
 		sensorPin = A0;
 		selectPin1 = 8;
-		selectPin2 = 9;
-		selectPin3 = 10;
+		selectPin2 = 3;
+		selectPin3 = 4;
 		sensorPinline1 = A1;
 		sensorPinline2 = A4;
 	}	else {
@@ -111,27 +111,27 @@ void IR::selectChannel(int channel){
 }
 
 float IR::findAngleRockRobot(int rockChannel){
-	float angleRockRobot;
+	float angleRockRobot=0;
 	if(rockChannel!=0){
 		if(rockChannel!=4 && rockChannel!=5){
 			switch(rockChannel){
 				case 1:
-					angleRockRobot=(-1)*((40/9)*4-(20/9));
+					angleRockRobot=(-1)*(((40.0f*4.0f)/9.0f)-(20.0f/9.0f));
 					break;
 				case 2:
-					angleRockRobot=(-1)*((40/9)*3-(20/9));
+					angleRockRobot=(-1)*(((40.0f*3.0f)/9.0f)-(20.0f/9.0f));
 					break;
 				case 3:
-					angleRockRobot=(-1)*((40/9)*2-(20/9));
+					angleRockRobot=(-1)*(((40.0f*2.0f)/9.0f)-(20.0f/9.0f));
 					break;
 				case 6:
-					angleRockRobot=(1)*((40/9)*2-(20/9));
+					angleRockRobot=(1)*(((40.0f*2.0f)/9.0f)-(20.0f/9.0f));
 					break;
 				case 7:
-					angleRockRobot=(1)*((40/9)*3-(20/9));
+					angleRockRobot=(1)*(((40.0f*3.0f)/9.0f)-(20.0f/9.0f));
 					break;
 				case 8:
-					angleRockRobot=(1)*((40/9)*4-(20/9));
+					angleRockRobot=(1)*(((40.0f*4.0f)/9.0f)-(20.0f/9.0f));
 					break;
 			}
 		} else {
