@@ -19,11 +19,11 @@ void loop() {
 
   int lineDetection = ir.readLineSensor();
 
-  if (lineDetection == 1){
+  if (lineDetection == 2){
       motion.stopDriving();
       motion.turnRightCliff();
   }
-  else if (lineDetection == 2){
+  else if (lineDetection == 1){
       motion.stopDriving();
       motion.turnLeftCliff();
   }
@@ -31,18 +31,17 @@ void loop() {
       motion.stopDriving();
       motion.turnRightCliff();
   }
-  else if (lineDetection == 0){
-      
-  }
-  
-  int turnOrNot = motion.measureUltrasound();
-  if (turnOrNot < 0 && lineDetection == 0){
-    motion.startDriving();   
-  }
   else{
-    
-    motion.turnAfterObstacle(turnOrNot);
-    
-    }
+  
+      int turnOrNot = motion.measureUltrasound();
+      if (turnOrNot < 0 && lineDetection == 0){
+        motion.startDriving();   
+      }
+      else{
+        
+        motion.turnAfterObstacle(turnOrNot);
+        
+        }
+  }
 
 }
