@@ -21,15 +21,15 @@ void loop() {
 
   if (lineDetection == 1){
       motion.stopDriving();
-      motion.turnRight();
+      motion.turnRightCliff();
   }
   else if (lineDetection == 2){
       motion.stopDriving();
-      motion.turnLeft();
+      motion.turnLeftCliff();
   }
   else if (lineDetection == 3){
       motion.stopDriving();
-      motion.turnRight();
+      motion.turnRightCliff();
   }
   else if (lineDetection == 0){
       

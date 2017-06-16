@@ -53,6 +53,8 @@ class Motion
 		int rightWheelStatus;
 		int positionWall();
 		int ultrasoundAngle;
+		void turnLeftCliff();
+		void turnRightCliff();
 };
 
 #endif
