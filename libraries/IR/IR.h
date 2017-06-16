@@ -23,8 +23,8 @@ class IR
 		int rockSensorValueValidated = 0;
 		int rockSensorValue = 0;
 		int rockSensorThresholdValue = 220;
-		float maxRockSensorValue = 120;
-		float minRockSensorValue = 1000;
+		float maxRockSensorValue = 900;
+		float minRockSensorValue = 200;
 
 		
 		int threshold = 145;
