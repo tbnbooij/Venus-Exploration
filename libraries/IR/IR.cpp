@@ -153,19 +153,19 @@ int IR::readLineSensor(){
   int stateRight = analogRead(sensorPinline2);
   int lineDetectionStatus;
     
-  if (stateLeft < threshold && stateRight > threshold){
+  if (stateLeft < threshold && stateRight > threshold1){
     lineDetectionStatus = 1;
   }
   //right sensor sees tape
-  if (stateRight < threshold && stateLeft > threshold){
+  if (stateRight < threshold1 && stateLeft > threshold){
     lineDetectionStatus = 2;
   }
   //bot see tape
-  if(stateRight < threshold && stateLeft < threshold){
+  if(stateRight < threshold1 && stateLeft < threshold){
     lineDetectionStatus = 3;
   }
   //no sensor sees tape
-  if (stateLeft > threshold && stateRight > threshold){
+  if (stateLeft > threshold && stateRight > threshold1){
     lineDetectionStatus = 0;
   }
   
