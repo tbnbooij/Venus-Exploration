@@ -2,7 +2,6 @@
 #define Encoder_h
 
 #include "Arduino.h"
-#include "Math.h"
 
 class Encoder
 {
