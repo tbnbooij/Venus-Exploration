@@ -26,16 +26,21 @@ void loop(){
     anglereturn=ir.findAngleRockRobot(rockChannel);
     Serial.print("Angle (degree): ");
     Serial.println(anglereturn);
-    if(anglereturn<0){
-      motion.turnLeft();
+    if(anglereturn != 0.0f) {
+      if(anglereturn<0){
+        motion.turnLeft();
+      }
+      if(anglereturn>0){
+        motion.turnRight();
+        delay(180/15.6*abs(anglereturn));
+        motion.stopDriving();
+        delay(200);
+      }
+    } else {
+      delay(180/15.6*abs(anglereturn));
+      motion.stopDriving();
+      delay(200);
     }
-    if(anglereturn>0){
-      motion.turnRight();
-    }
-
-    delayMicroseconds(180000/15.6*abs(anglereturn));
-    motion.stopDriving();
-    delay(200);
 
     /*motion.openGrabber();
     motion.startDriving();
