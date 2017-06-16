@@ -18,10 +18,13 @@ void setup() {
 void loop() {
   encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
   rockChannel = ir.readRockSensor();
-  Serial.print("Channel found: ");
-  Serial.println(rockChannel);
+    Serial.print("Channel found: ");
+    Serial.println(rockChannel);
 
   if (rockChannel > 0) {
+    motion.startDrivingBackwards();
+    delay(50);
+    motion.stopDriving();
     t = 1;
     anglereturn = ir.findAngleRockRobot(rockChannel);
     Serial.print("Angle (degree): ");
@@ -40,10 +43,11 @@ void loop() {
       motion.openGrabber();
       delay(100);
       motion.startDriving();
-      delay(750);
+      delay(700);
       motion.stopDriving();
       delay(250);
       motion.closeGrabber();
+      delay(200);
     }
   } else {
     motion.startDriving();
@@ -54,5 +58,4 @@ void loop() {
 
 
   Serial.println("----------");
-  delay(10);
 }
