@@ -16,7 +16,8 @@ void setup() {
   Serial.begin(9600);
   }
 void loop(){
-  encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
+  
+  /*encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
   switch(t) {
     case 0:
       rockChannel=ir.readRockSensor();
@@ -47,9 +48,12 @@ void loop(){
   }
 
   Serial.print("Status: ");
-  Serial.println(t);
+  Serial.println(t);*/
+
+        rockChannel=ir.readRockSensor();
+
     
   Serial.println("----------");
-  delay(500);
+  delay(1000);
 
 }

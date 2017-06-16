@@ -4,7 +4,7 @@
 IR::IR(int robot) {
 	if(robot == 1) {
 		sensorPin = A0;
-		selectPin1 = 1;
+		selectPin1 = 5;
 		selectPin2 = 3;
 		selectPin3 = 4;
 		sensorPinline1 = A1;
@@ -46,10 +46,9 @@ int IR::readRockSensor(){
         rockChannel=channel;
       }
 	  
-	   if(channel == 1) {
-	  Serial.print("1: ");
+	  Serial.print(channel);
+	  Serial.print(":");
 	  Serial.println(rockSensorValue);
-  }
   }
  
   
