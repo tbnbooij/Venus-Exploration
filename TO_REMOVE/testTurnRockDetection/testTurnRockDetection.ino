@@ -1,7 +1,7 @@
 #include <IR.h>
 #include <Motion.h>
 #include <Encoder.h>
-#include <Math.h>
+#include <math.h>
 
 IR ir(1);
 Motion motion(1);
@@ -10,7 +10,7 @@ int t = 0;
   float anglereturn;
   int rockChannel;
 
-void setup(){
+void setup() {
   ir.setup();
   encoder.setup();
   Serial.begin(9600);
@@ -48,8 +48,7 @@ void loop(){
 
   Serial.print("Status: ");
   Serial.println(t);
-  rockChannel=ir.readRockSensor();
-  
+    
   Serial.println("----------");
   delay(500);
 

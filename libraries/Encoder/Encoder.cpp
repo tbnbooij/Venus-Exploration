@@ -1,6 +1,6 @@
 #include "Encoder.h"
 #include "Arduino.h"
-#include "Math.h"
+#include "math.h"
 
 Encoder::Encoder(int robot) {
 	if(robot == 1) {
