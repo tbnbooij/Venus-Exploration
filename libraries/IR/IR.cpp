@@ -4,7 +4,7 @@
 IR::IR(int robot) {
 	if(robot == 1) {
 		sensorPin = A0;
-		selectPin1 = 8;
+		selectPin1 = 1;
 		selectPin2 = 3;
 		selectPin3 = 4;
 		sensorPinline1 = A1;
