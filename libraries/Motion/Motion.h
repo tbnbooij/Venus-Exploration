@@ -17,7 +17,7 @@ class Motion
 		Servo servoUltrasound;
 		int pingPin;
 		int ultraSoundServo;		                // Pin where the servo of the ultrasound sensor is connected
-		int maxDistance = 30;                       // Distance detected where so stop driving
+		int maxDistance = 35;                       // Distance detected where so stop driving
 		int turnTime = 20;                         // Time to turn when detecting something
 		int initialSetupUltrasoundServo = 100;      // Amount of time needed to return ultrasound servo to the initial position
 		int servoLeftPin;		                    // Pin for left servo wheel
