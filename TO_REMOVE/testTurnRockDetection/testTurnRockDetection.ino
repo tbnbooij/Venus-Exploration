@@ -37,17 +37,14 @@ void loop(){
         delay(200);
       }
     } else {
-      delay(180/15.6*abs(anglereturn));
+      motion.openGrabber();
+      delay(100);
+      motion.startDriving();
+      delay(750);
       motion.stopDriving();
-      delay(200);
+      delay(250);
+      motion.closeGrabber();
     }
-
-    /*motion.openGrabber();
-    motion.startDriving();
-    delay(750);
-    motion.stopDriving();
-    delay(250);
-    motion.closeGrabber();*/
 
   }
 
