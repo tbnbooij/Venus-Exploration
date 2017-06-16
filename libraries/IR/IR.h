@@ -27,8 +27,8 @@ class IR
 		int minRockSensorValue = 1000;
 
 		
-		int threshold = 160;
-		int threshold1= 200;
+		int threshold = 145;
+		int threshold1= 180;
 	public:
 		IR(int robot);
 		void selectChannel(int channel);
