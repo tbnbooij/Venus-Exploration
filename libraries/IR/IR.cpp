@@ -38,6 +38,9 @@ int IR::readRockSensor(){
 	delay(10);
     //read analog value and update store max
       rockSensorValue=analogRead(sensorPin);
+	  if(channel == 8) {
+		  rockSensorValue += 30;
+	  }
       //Serial.println(rockSensorValue);
       //Serial.println(channel);
       //delay(1000);

@@ -32,10 +32,10 @@ void loop() {
       }
       if (anglereturn > 0) {
         motion.turnRight();
-        delay(180 / 15.6 * abs(anglereturn));
-        motion.stopDriving();
-        delay(200);
       }
+      delay(180 / 15.6 * abs(anglereturn));
+      motion.stopDriving();
+      delay(200);
     } else {
       motion.openGrabber();
       delay(100);
@@ -45,7 +45,8 @@ void loop() {
       delay(250);
       motion.closeGrabber();
     }
-
+  } else {
+    motion.startDriving();
   }
 
   Serial.print("Status: ");
@@ -53,4 +54,5 @@ void loop() {
 
 
   Serial.println("----------");
+  delay(10);
 }
