@@ -165,12 +165,30 @@ void Motion::turnLeft() {
 	leftWheelStatus = -1;
 	rightWheelStatus = 1;
 }
+void Motion::turnLeftCliff() {
+	servoLeft.attach(servoLeftPin);                     
+    servoRight.attach(servoRightPin);
+	servoLeft.writeMicroseconds(1300);         
+    servoRight.writeMicroseconds(1300);
+	delay(200);
+	leftWheelStatus = -1;
+	rightWheelStatus = 1;
+}
 
 void Motion::turnRight() {
 	servoLeft.attach(servoLeftPin);                     
     servoRight.attach(servoRightPin);
 	servoLeft.writeMicroseconds(1700);         
     servoRight.writeMicroseconds(1700);
+	leftWheelStatus = 1;
+	rightWheelStatus = -1;
+}
+void Motion::turnRightCliff() {
+	servoLeft.attach(servoLeftPin);                     
+    servoRight.attach(servoRightPin);
+	servoLeft.writeMicroseconds(1700);         
+    servoRight.writeMicroseconds(1700);
+	delay(200);
 	leftWheelStatus = 1;
 	rightWheelStatus = -1;
 }
