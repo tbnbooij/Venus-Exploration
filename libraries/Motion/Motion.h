@@ -14,7 +14,6 @@ class Motion
 		boolean isDriving = false;
 		float distance = 0;
 
-		Servo servoUltrasound;
 		int pingPin;
 		int ultraSoundServo;		                // Pin where the servo of the ultrasound sensor is connected
 		int maxDistance = 35;                       // Distance detected where so stop driving
@@ -37,6 +36,9 @@ class Motion
 		int degreeRight;	                    // Amount of degrees on the left side of the ultrasound sensor
 		int degreeLeft;                       // Amount of degrees on the right side of the ultrasound sensor
 		int ultrasoundGoingLeft = 1;
+		
+		Servo servoUltrasound;
+
 		
 		int measureUltrasound();
 		float measurement();
