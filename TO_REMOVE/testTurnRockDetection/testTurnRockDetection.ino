@@ -7,32 +7,32 @@ IR ir(1);
 Motion motion(1);
 Encoder encoder(1);
 int t = 0;
-  float anglereturn;
-  int rockChannel;
+float anglereturn;
+int rockChannel;
 
 void setup() {
   ir.setup();
   encoder.setup();
   Serial.begin(9600);
-  }
-void loop(){
+}
+void loop() {
   encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
-  rockChannel=ir.readRockSensor();
+  rockChannel = ir.readRockSensor();
   Serial.print("Channel found: ");
   Serial.println(rockChannel);
 
-  if(rockChannel > 0) {
+  if (rockChannel > 0) {
     t = 1;
-    anglereturn=ir.findAngleRockRobot(rockChannel);
+    anglereturn = ir.findAngleRockRobot(rockChannel);
     Serial.print("Angle (degree): ");
     Serial.println(anglereturn);
-    if(anglereturn != 0.0f) {
-      if(anglereturn<0){
+    if (anglereturn != 0.0f) {
+      if (anglereturn < 0) {
         motion.turnLeft();
       }
-      if(anglereturn>0){
+      if (anglereturn > 0) {
         motion.turnRight();
-        delay(180/15.6*abs(anglereturn));
+        delay(180 / 15.6 * abs(anglereturn));
         motion.stopDriving();
         delay(200);
       }
@@ -51,6 +51,6 @@ void loop(){
   Serial.print("Status: ");
   Serial.println(t);
 
-    
+
   Serial.println("----------");
 }
