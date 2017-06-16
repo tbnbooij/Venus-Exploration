@@ -16,44 +16,39 @@ void setup() {
   Serial.begin(9600);
   }
 void loop(){
-  
-  /*encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
-  switch(t) {
-    case 0:
-      rockChannel=ir.readRockSensor();
-      Serial.print("Channel found: ");
-      Serial.println(rockChannel);
-  
-      if(rockChannel > 0) {
-        t = 1;
-        anglereturn=-1*ir.findAngleRockRobot(rockChannel);
-        Serial.print("Angle (degree): ");
-        Serial.println(anglereturn);
-        anglereturn=(anglereturn/360)*2*M_PI;
-        if(anglereturn>0){
-          motion.turnLeft();
-        }
-        if(anglereturn<0){
-          motion.turnRight();
-        }
-      }
-      break;
+  encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
+  rockChannel=ir.readRockSensor();
+  Serial.print("Channel found: ");
+  Serial.println(rockChannel);
 
-    case 1:
-      if(encoder.checkAngleTurned(anglereturn)) {
-        motion.stopDriving();
-        t = 2;
-      }
-      break;
+  if(rockChannel > 0) {
+    t = 1;
+    anglereturn=ir.findAngleRockRobot(rockChannel);
+    Serial.print("Angle (degree): ");
+    Serial.println(anglereturn);
+    if(anglereturn<0){
+      motion.turnLeft();
+    }
+    if(anglereturn>0){
+      motion.turnRight();
+    }
+
+    delayMicroseconds(180000/15.6*abs(anglereturn));
+    motion.stopDriving();
+    delay(200);
+
+    /*motion.openGrabber();
+    motion.startDriving();
+    delay(750);
+    motion.stopDriving();
+    delay(250);
+    motion.closeGrabber();*/
+
   }
 
   Serial.print("Status: ");
-  Serial.println(t);*/
-
-        rockChannel=ir.readRockSensor();
+  Serial.println(t);
 
     
   Serial.println("----------");
-  delay(1000);
-
 }
