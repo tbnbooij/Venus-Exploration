@@ -58,6 +58,11 @@ int IR::readRockSensor(){
   }else{
     rockChannel=0;
   }
+  
+  Serial.print("(Highest: ");
+  Serial.print(rockChannel);
+  Serial.println(")");
+  
   return(rockChannel);
 
 }
@@ -139,7 +144,10 @@ float IR::findAngleRockRobot(int rockChannel){
 			rockSensor4Value=analogRead(sensorPin);
 			selectChannel(5);
 			rockSensor5Value=analogRead(sensorPin);
-			angleRockRobot=((rockSensor4Value-rockSensor5Value)/(maxRockSensorValue-minRockSensorValue));
+			angleRockRobot=((rockSensor4Value-rockSensor5Value)/(maxRockSensorValue-minRockSensorValue))*(20.0f/9.0f);
+			if(angleRockRobot<2){
+				angleRockRobot=0;		
+			}
 		}
 	} else {
 		angleRockRobot=0;

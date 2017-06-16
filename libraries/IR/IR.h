@@ -18,13 +18,13 @@ class IR
 		int rockChannel = 0;
 		int rockSensorValueHighest =0;
 		int rockSensorValueMax = 0;
-		int rockSensor4Value=0;
-		int rockSensor5Value=0;
+		float rockSensor4Value=0;
+		float rockSensor5Value=0;
 		int rockSensorValueValidated = 0;
 		int rockSensorValue = 0;
 		int rockSensorThresholdValue = 220;
-		int maxRockSensorValue = 120;
-		int minRockSensorValue = 1000;
+		float maxRockSensorValue = 900;
+		float minRockSensorValue = 200;
 
 		
 		int threshold = 145;
