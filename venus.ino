@@ -106,7 +106,7 @@ void loop() {
     // No rock detected
     if (returningToBase) {
       // detect the beacon
-      int beaconMeasurement = beacon.measure(motion.ultrasoundAngle, motion.leftDegree, motion.rightDegree, servoUltrasound);
+      int beaconMeasurement = beacon.measure(motion.ultrasoundAngle, motion.degreeLeft, motion.degreeRight, motion.servoUltrasound);
 
       if (beaconMeasurement != -1) {
         // beacon not detected
@@ -150,7 +150,7 @@ void loop() {
     if (encoder.checkAngleTurned(turnBaseAngle)) {
       turnBaseAngle = 0.0f;
       motion.stopDriving();
-      motion.delay2(500);
+      delay2(500);
       motion.startDriving();
     }
   }

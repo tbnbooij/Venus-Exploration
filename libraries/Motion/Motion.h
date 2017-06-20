@@ -26,7 +26,6 @@ class Motion
 		int measurementRef = 0;
 		boolean firstPositioningWall = true;
 		int closedAngleWall = 0;
-		int normal;
 		int deviationNormal = 40;
 
 	public:
