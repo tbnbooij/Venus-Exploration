@@ -34,13 +34,6 @@ void loop() {
   encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
 
   if(robotStatus == 2) {
-    // turn towards lab
-    float angle = encoder.getAngle();
-
-    // turn towards lab
-    float encoderAngle = encoder.getAngle();
-    float requiredAngle = encoder.boundAngle(M_PI - atan(encoder.getY() / encoder.getX()));
-
     float turnAngle = encoder.getTurnAngle();
     
     if(turnAngle > 0) {
