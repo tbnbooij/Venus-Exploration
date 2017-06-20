@@ -26,7 +26,7 @@ int Beacon::measure(int angle, int left, int right, Servo servo) {
   }
 
   if(angle == left || angle == right) {
-    uint8_t maxAng = maxVal[1];
+    int maxAng = maxVal[1];
 
     start();
     return maxAng;
