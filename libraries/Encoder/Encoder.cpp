@@ -165,6 +165,13 @@ float Encoder::boundAngle(float a) {
 	return a;
 }
 
+float getTurnAngle() {
+	float encoderAngle = getAngle();
+    float requiredAngle = encoder.boundAngle(M_PI - atan(encoder.getY() / encoder.getX()));
+
+    return encoder.boundAngle(2*M_PI - requiredAngle - encoderAngle);
+}
+
 float Encoder::getX() {
 	return x;
 }

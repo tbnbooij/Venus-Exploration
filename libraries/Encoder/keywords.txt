@@ -6,4 +6,5 @@ getX	KEYWORD2
 getY	KEYWORD2
 getAngle	KEYWORD2
 getRawAngle	KEYWORD2
+getTurnAngle	KEYWORD2
 test	KEYWORD2

@@ -50,7 +50,7 @@ class Encoder
 		String test();
 		
 		float boundAngle(float a);
-
+		float getTurnAngle();
 };
 
 #endif

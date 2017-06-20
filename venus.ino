@@ -41,7 +41,7 @@ void loop() {
     float encoderAngle = encoder.getAngle();
     float requiredAngle = encoder.boundAngle(M_PI - atan(encoder.getY() / encoder.getX()));
 
-    float turnAngle = encoder.boundAngle(2*M_PI - requiredAngle - encoderAngle);
+    float turnAngle = encoder.getTurnAngle();
     
     if(turnAngle > 0) {
       motion.turnLeft();

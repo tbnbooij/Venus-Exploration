@@ -18,6 +18,8 @@ Call this function in the `loop()` to read the encoders and update the `x`, `y` 
 Whenever the robot has to drive a fixed distance, call `Motion::startDriving()`. Call this function in the `loop()`. It will return `true` when the distance is covered (since first calling the function with that distance).
 ### boolean checkAngleTurned(float a)
 Similar to the `checkDistanceDriven` function; returns true after the difference between the current angle and the saved angle - when the turning started - passed the `a` argument. The angle is positive when turning left and negative when turning right.
+### float getTurnAngle()
+This method returns the angle must turn to face the base, either negative to turn right or positive to turn left.
 ### float getX()
 Method which returns the current `x` coordinate. The variable itself cannot be edited directly, as it is private.
 ### float getY()
