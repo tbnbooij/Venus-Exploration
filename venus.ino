@@ -155,12 +155,12 @@ void loop() {
     }
   }
 
-  if(beaconFound && turnBaseAngle == 0) {
+  if (beaconFound && turnBaseAngle == 0) {
     /**
-     * @TODO Base entering
-     */
+       @TODO Base entering
+    */
   }
-  
+
 }
 
 /**
