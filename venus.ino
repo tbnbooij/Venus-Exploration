@@ -1,23 +1,15 @@
-/*
-   0: searching rocks
-   1: found a rock
-   2: return to base (not turned)
-   3: return to base (turned towards base w/ relative position)
-   4: return to base (found beacon), finding entrance
-   5: on the ramp
-*/
-
-
 #include <Encoder.h>
 #include <Motion.h>
 //#include <Wireless.h>
 #include <IR.h>
+#include <Beacon.h>
 
 const int robot = 1;
 
 boolean returningToBase = false;
+boolean beaconFound = false;
 
-
+float turnBaseAngle = 0.0f;
 
 boolean cliffSideHillDetection = false;
 boolean cliffSideHillDetectionPrevious = false;
@@ -27,7 +19,7 @@ boolean avoidingObstacle = false;
 Encoder encoder(robot);
 Motion motion(robot);
 //Wireless wireless(robot);
-//Beacon beacon;
+Beacon beacon(A2);
 IR ir(robot);
 
 void setup() {
@@ -36,21 +28,22 @@ void setup() {
   encoder.setup();
   //wireless.setup();
   ir.setup();
+  beacon.start();
 }
 
 void loop() {
   encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
 
+  cliffSideHillDetectionPrevious = cliffSideHillDetection;
   cliffSideHillDetection = false;
   int ultrasoundAngle = motion.measureUltrasound();
-  if (ultrasoundAngle == -1) {
+  if (ultrasoundAngle != -1) {
     if (ultrasoundAngle > motion.normal ) {
       motion.turnRight();
     }
     if (ultrasoundAngle <= motion.normal ) {
       motion.turnLeft();
     }
-  } else {
     cliffSideHillDetection = true;
   }
 
@@ -65,8 +58,8 @@ void loop() {
     }
   }
 
-  if (cliffSideHillDetection == false && cliffSideHillDetectionPrevious == true) {
-    if (returningToBase == true) {
+  if (!cliffSideHillDetection && cliffSideHillDetectionPrevious) {
+    if (returningToBase) {
       motion.startDriving();
       avoidingObstacle = true;
     } else {
@@ -80,7 +73,7 @@ void loop() {
     delay2(50);
     motion.stopDriving();
     float anglereturn = ir.findAngleRockRobot(rockChannel);
-    if (returningToBase == false) {
+    if (!returningToBase) {
       if (anglereturn != 0.0f) {
         if (anglereturn < 0.0f) {
           motion.turnLeft();
@@ -112,35 +105,70 @@ void loop() {
   } else {
     // No rock detected
     if (returningToBase) {
-      int turnAngle = encoder.getTurnAngle();
-      if (turnAngle > 0) {
-        motion.turnLeft();
-      }
+      // detect the beacon
+      int beaconMeasurement = beacon.measure(motion.ultrasoundAngle, motion.leftDegree, motion.rightDegree, servoUltrasound);
 
-      if (turnAngle < 0) {
-        motion.turnRight();
+      if (beaconMeasurement != -1) {
+        // beacon not detected
+        if (turnBaseAngle == 0) {
+          turnBaseAngle = encoder.getTurnAngle();
+          if (turnBaseAngle > 0) {
+            motion.turnLeft();
+          }
+
+          if (turnBaseAngle < 0) {
+            motion.turnRight();
+          }
+        }
+      } else {
+        // found the beacon
+
+        beaconFound = true;
+        turnBaseAngle = 2 * M_PI / 360 * (beaconMeasurement - motion.normal);
+
+        if (turnBaseAngle > 1) {
+          motion.turnLeft();
+        }
+
+        if (turnBaseAngle < -1) {
+          motion.turnRight();
+        }
       }
     } else {
       motion.startDriving();
     }
   }
 
-  if (avoidingObstacle == true) {
+  if (avoidingObstacle) {
     if (encoder.checkDistanceDriven(0.4)) {
       motion.stopDriving();
       avoidingObstacle = false;
     }
   }
 
-  cliffSideHillDetectionPrevious = cliffSideHillDetection;
+  if (turnBaseAngle > 0.0f) {
+    if (encoder.checkAngleTurned(turnBaseAngle)) {
+      turnBaseAngle = 0.0f;
+      motion.stopDriving();
+      motion.delay2(500);
+      motion.startDriving();
+    }
+  }
+
+  if(beaconFound && turnBaseAngle == 0) {
+    /**
+     * @TODO Base entering
+     */
+  }
+  
 }
 
 /**
    Function to delay a certain time, but without 'forgetting' to update the relative position.
 */
 void delay2(int t) {
-  for (int i = 0; i < t; i += 5) {
-    delayMicroseconds(5000);
+  for (int i = 0; i < t; i++) {
+    delayMicroseconds(1000);
     encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
   }
 }
