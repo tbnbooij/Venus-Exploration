@@ -18,8 +18,8 @@ void setup() {
 void loop() {
   encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
   rockChannel = ir.readRockSensor();
-    Serial.print("Channel found: ");
-    Serial.println(rockChannel);
+  Serial.print("Channel found: ");
+  Serial.println(rockChannel);
 
   if (rockChannel > 0) {
     motion.startDrivingBackwards();

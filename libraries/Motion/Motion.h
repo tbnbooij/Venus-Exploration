@@ -53,6 +53,7 @@ class Motion
 		void closeGrabber();
 		int leftWheelStatus;
 		int rightWheelStatus;
+		int normal;
 		int positionWall();
 		int ultrasoundAngle;
 		void turnLeftCliff();
