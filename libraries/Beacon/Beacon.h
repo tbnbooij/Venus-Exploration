@@ -14,7 +14,7 @@ class Beacon
     		Beacon(uint8_t pin);
     		void start();
 		short maxVal[2] = {0};
-    		void measure(int angle, int left, int right, Servo servo, bool demo);
+    		int measure(int angle, int left, int right, Servo servo);
 };
 
 #endif
