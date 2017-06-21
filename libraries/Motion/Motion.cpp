@@ -170,7 +170,7 @@ void Motion::turnLeftCliff() {
     servoRight.attach(servoRightPin);
 	servoLeft.writeMicroseconds(1300);         
     servoRight.writeMicroseconds(1300);
-	delay(200);
+	delay(500);
 	leftWheelStatus = -1;
 	rightWheelStatus = 1;
 }

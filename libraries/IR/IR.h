@@ -25,10 +25,9 @@ class IR
 		int rockSensorThresholdValue = 220;
 		float maxRockSensorValue = 900;
 		float minRockSensorValue = 200;
-
 		
-		int threshold = 180;
-		int threshold1 = 210;
+		int threshold = 100;
+		int threshold1 = 100;
 	public:
 		IR(int robot);
 		void selectChannel(int channel);
