@@ -23,6 +23,10 @@ class IR
 		int rockSensorValueValidated = 0;
 		int rockSensorValue = 0;
 		int rockSensorThresholdValue = 220;
+		
+		int detectedChannels = 0;
+		int wallThreshold = 220;
+		
 		float maxRockSensorValue = 900;
 		float minRockSensorValue = 200;
 		
@@ -34,7 +38,7 @@ class IR
 		float findAngleRockRobot(int rockChannel);
 		void setup();
 		int readLineSensor();
-		
+		int alignWithBase();
 		int readRockSensor();
 };
 
