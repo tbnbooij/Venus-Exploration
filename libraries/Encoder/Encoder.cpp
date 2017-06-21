@@ -58,11 +58,6 @@ float Encoder::readRightEncoder(int rightWheelStatus) {
 	float rightDelta = 0.0;
 	
 	rightEncoderState = digitalRead(pinRight);
-	if(rightEncoderState == HIGH) {
-		Serial.println(1);
-	} else {
-		Serial.println(0);
-	}
 	if(rightEncoderState != lastRightEncoderState) {
 		// LOW for 6.5 out of 11.5, HIGH for 5 out of 11.5
 		if(rightEncoderState == HIGH) {
@@ -126,7 +121,6 @@ boolean Encoder::checkDistanceDriven(float distance) {
 	}
 	
 	boolean b = sqrt(pow(x-xStart, 2)+pow(y-yStart,2)) >= abs(distance);
-	
 	if(b) {
 		distanceToBeDriven = 0;
 	}
@@ -138,13 +132,13 @@ boolean Encoder::checkAngleTurned(float a) {
 		angleStart = angle;
 		angleToBeTurned = a;
 	}
-	
+
 	boolean b = false;
 	
 	if(a > 0) {
 		b = angleStart + a <= angle;
 	} else {
-		b = angleStart - a >= angle;
+		b = angleStart + a >= angle;
 	}
 	
 	if(b) {
@@ -167,9 +161,20 @@ float Encoder::boundAngle(float a) {
 
 float Encoder::getTurnAngle() {
 	float encoderAngle = getAngle();
-    float requiredAngle = boundAngle(M_PI - atan(y/x));
+    float requiredAngle = M_PI - atan(y/x);
+    requiredAngle = boundAngle(requiredAngle);
+    float turnAngle = boundAngle(2*M_PI - requiredAngle - encoderAngle);
 
-    return boundAngle(2*M_PI - requiredAngle - encoderAngle);
+    Serial.print("encoderAngle: ");
+    Serial.println(encoderAngle);
+    Serial.print("requiredAngle: ");
+    Serial.println(requiredAngle);
+    Serial.print("turnAngle: ");
+    Serial.println(turnAngle);
+
+    return turnAngle;
+
+
 }
 
 float Encoder::getX() {
