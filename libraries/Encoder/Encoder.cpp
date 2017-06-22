@@ -165,13 +165,6 @@ float Encoder::getTurnAngle() {
     requiredAngle = boundAngle(requiredAngle);
     float turnAngle = boundAngle(2*M_PI - requiredAngle - encoderAngle);
 
-    Serial.print("encoderAngle: ");
-    Serial.println(encoderAngle);
-    Serial.print("requiredAngle: ");
-    Serial.println(requiredAngle);
-    Serial.print("turnAngle: ");
-    Serial.println(turnAngle);
-
     return turnAngle;
 
 

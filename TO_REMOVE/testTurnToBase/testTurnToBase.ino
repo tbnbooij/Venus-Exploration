@@ -28,7 +28,7 @@ void loop()
       break;
     case 1:
       motion.turnLeft();
-      if (encoder.checkAngleTurned(90*2*M_PI/360)) {
+      if (encoder.checkAngleTurned(50*2*M_PI/360)) {
         situation = 2;
         motion.stopDriving();
       }

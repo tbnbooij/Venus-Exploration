@@ -1,7 +1,7 @@
 #include <Motion.h>
 #include <Encoder.h>
 
-const int robot = 2;
+const int robot = 1;
 
 Encoder encoder(robot);
 Motion motion(robot);

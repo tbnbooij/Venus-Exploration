@@ -32,12 +32,15 @@ void setup() {
 }
 
 void loop() {
+  Serial.println("------");
+
   encoder.updateRelativePosition(motion.leftWheelStatus, motion.rightWheelStatus);
 
   cliffSideHillDetectionPrevious = cliffSideHillDetection;
   cliffSideHillDetection = false;
   int ultrasoundAngle = motion.measureUltrasound();
   if (ultrasoundAngle != -1) {
+    Serial.println("ULTRASOUND");
     if (ultrasoundAngle > motion.normal ) {
       motion.turnRight();
     }
@@ -47,18 +50,27 @@ void loop() {
     cliffSideHillDetection = true;
   }
 
-  int lineState = ir.readLineSensor();
+  int lineState = 0; //ir.readLineSensor();
   if (lineState > 0) {
+    Serial.print("Line detected: ");
+
     cliffSideHillDetection = true;
-    if (lineState == 1 || lineState == 3) {
+    if (lineState == 1) {
       motion.turnRight();
+      Serial.println("left side");
     }
     if (lineState == 2) {
       motion.turnLeft();
+      Serial.println("right side");
+    }
+    if (lineState == 3) {
+      motion.turnRight();
+      Serial.println("both sides");
     }
   }
 
   if (!cliffSideHillDetection && cliffSideHillDetectionPrevious) {
+    Serial.println("No cliff/side/hill anymore");
     if (returningToBase) {
       motion.startDriving();
       avoidingObstacle = true;
@@ -67,8 +79,14 @@ void loop() {
     }
   }
 
+  if (cliffSideHillDetection) {
+    return;
+  }
+
   int rockChannel = ir.readRockSensor();
   if (rockChannel > 0) {
+    Serial.print("Rock found: ");
+    Serial.println(rockChannel);
     motion.startDrivingBackwards();
     delay2(50);
     motion.stopDriving();
@@ -99,7 +117,7 @@ void loop() {
       }
     } else { // cant pick up the rock, it is already returning to base
       /**
-         @TODO: avoid the rock! Check how much turning is enough per channel to avoid it entirely
+        @TODO: avoid the rock! Check how much turning is enough per channel to avoid it entirely
       */
     }
   } else {
@@ -122,7 +140,7 @@ void loop() {
         }
       } else {
         // found the beacon
-
+        Serial.println("Beacon found");
         beaconFound = true;
         turnBaseAngle = 2 * M_PI / 360 * (beaconMeasurement - motion.normal);
 
@@ -157,14 +175,13 @@ void loop() {
 
   if (beaconFound && turnBaseAngle == 0) {
     /**
-       @TODO Base entering
+      @TODO Base entering
     */
   }
-
 }
 
 /**
-   Function to delay a certain time, but without 'forgetting' to update the relative position.
+  Function to delay a certain time, but without 'forgetting' to update the relative position.
 */
 void delay2(int t) {
   for (int i = 0; i < t; i++) {
