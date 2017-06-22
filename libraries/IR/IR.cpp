@@ -159,26 +159,40 @@ float IR::findAngleRockRobot(int rockChannel){
 	return angleRockRobot;
 }
 
+int IR::alignWithBase(){
+	detectedChannels=0
+	selectChannel(1):
+	delay(20);
+	rockSensorValue=analogRead(sensorPin);
+	if (rockSensorValue>wallThreshold){
+        detectedChannels++;
+    }
+	selectChannel(8):
+	delay(20);
+	rockSensorValue=analogRead(sensorPin);
+	if (rockSensorValue>wallThreshold){
+        detectedChannels++;
+		detectedChannels++;
+    }
+	return detectedChannels;
+}
+
 int IR::readLineSensor(){
   int stateLeft = analogRead(sensorPinline1);
   int stateRight = analogRead(sensorPinline2);
-  int lineDetectionStatus;
+
     
   if (stateLeft < threshold && stateRight > threshold1){
-    lineDetectionStatus = 1;
+    return 1;
   }
   //right sensor sees tape
   if (stateRight < threshold1 && stateLeft > threshold){
-    lineDetectionStatus = 2;
+    return 2;
   }
   //bot see tape
   if(stateRight < threshold1 && stateLeft < threshold){
-    lineDetectionStatus = 3;
-  }
-  //no sensor sees tape
-  if (stateLeft > threshold && stateRight > threshold1){
-    lineDetectionStatus = 0;
+    return 3;
   }
   
-  return lineDetectionStatus;
+  return 0;
 } 

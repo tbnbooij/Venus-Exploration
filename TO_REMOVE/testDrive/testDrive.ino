@@ -39,7 +39,7 @@ void loop() {
   int Stateright = analogRead(sensorPinline2);
     
   //Serial.println(Stateright);
-         
+          
   // left sensor sees tape
   if (Stateleft<threshold && Stateright>threshold){
     thing = 1;
@@ -62,17 +62,18 @@ void loop() {
       line = 1;
       motion.stopDriving();
       motion.turnLeft();
-      delay(1000);
+      delay(100);
     }
     else if (thing == 2){
             motion.stopDriving();
             line = 1;
 
       motion.turnRight();
-      delay(1000);
+      delay(100);
     }
     else if (thing == 0){
       line = 0;
+      motion.startDriving();
       }
     Serial.println(Stateleft);
     
