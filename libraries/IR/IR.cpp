@@ -172,6 +172,7 @@ int IR::alignWithBase(){
 	rockSensorValue=analogRead(sensorPin);
 	if (rockSensorValue>wallThreshold){
         detectedChannels++;
+		detectedChannels++;
     }
 	return detectedChannels;
 }
