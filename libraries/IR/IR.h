@@ -25,7 +25,7 @@ class IR
 		int rockSensorThresholdValue = 220;
 		
 		int detectedChannels = 0;
-		int wallThreshold = 220;
+		int wallThreshold = 170;
 		
 		float maxRockSensorValue = 900;
 		float minRockSensorValue = 200;
