@@ -30,7 +30,7 @@ void IR::setup() {
 }
 
 
-  
+
 int IR::readRockSensor(){
   rockSensorValueHighest=0;
   for(channel=1;channel<=8;channel++){
@@ -48,24 +48,24 @@ int IR::readRockSensor(){
         rockSensorValueHighest=rockSensorValue;
         rockChannel=channel;
       }
-	  
+
 	  //Serial.print(channel);
 	  //Serial.print(":");
 	  //Serial.println(rockSensorValue);
   }
- 
-  
+
+
   //check if valid
   if(rockSensorValueHighest>=rockSensorThresholdValue) {
     rockSensorValueValidated=rockSensorValue; //update sensor value
   }else{
     rockChannel=0;
   }
-  
+
   //Serial.print("(Highest: ");
   //Serial.print(rockChannel);
   //Serial.println(")");
-  
+
   return(rockChannel);
 
 }
@@ -113,7 +113,7 @@ void IR::selectChannel(int channel){
           digitalWrite(selectPin2,HIGH);
           digitalWrite(selectPin3,HIGH);
           break;
-        
+
     }
 }
 
@@ -149,13 +149,13 @@ float IR::findAngleRockRobot(int rockChannel){
 			rockSensor5Value=analogRead(sensorPin);
 			angleRockRobot=((rockSensor4Value-rockSensor5Value)/(maxRockSensorValue-minRockSensorValue))*(40.0f/9.0f);
 			if(angleRockRobot<2){
-				angleRockRobot=0;		
+				angleRockRobot=0;
 			}
 		}
 	} else {
 		angleRockRobot=0;
 	}
-	
+
 	return angleRockRobot;
 }
 
@@ -166,22 +166,43 @@ int IR::alignWithBase(){
 	rockSensorValue=analogRead(sensorPin);
 	if (rockSensorValue>wallThreshold){
         detectedChannels++;
-    }
+  } else {
+		selectChannel(2);
+		delay(100);
+		rockSensorValue=analogRead(sensorPin);
+		if (rockSensorValue>wallThreshold){
+	        detectedChannels++;
+	  }
+	}
 	selectChannel(8);
 	delay(100);
 	rockSensorValue=analogRead(sensorPin);
 	if (rockSensorValue>wallThreshold){
         detectedChannels++;
-		detectedChannels++;
-    }
+				detectedChannels++;
+  } else {
+		selectChannel(7);
+		delay(100);
+		rockSensorValue=analogRead(sensorPin);
+		if (rockSensorValue>wallThreshold){
+	        detectedChannels++;
+					detectedChannels++;
+	  }
+	}
 	return detectedChannels;
+}
+
+float IR::readRawLineSensor() {
+	float stateLeft = analogRead(sensorPinline1);
+	float stateRight = analogRead(sensorPinline2);
+
+	return (stateLeft + stateRight) / 2;
 }
 
 int IR::readLineSensor(){
   int stateLeft = analogRead(sensorPinline1);
   int stateRight = analogRead(sensorPinline2);
 
-    
   if (stateLeft < threshold && stateRight > threshold1){
     return 1;
   }
@@ -193,6 +214,6 @@ int IR::readLineSensor(){
   if(stateRight < threshold1 && stateLeft < threshold){
     return 3;
   }
-  
+
   return 0;
-} 
+}

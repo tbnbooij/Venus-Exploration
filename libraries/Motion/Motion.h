@@ -35,11 +35,13 @@ class Motion
 		int degreeRight;	                    // Amount of degrees on the left side of the ultrasound sensor
 		int degreeLeft;                       // Amount of degrees on the right side of the ultrasound sensor
 		int ultrasoundGoingLeft = 1;
-		
+
 		Servo servoUltrasound;
 
-		
+
 		int measureUltrasound();
+		void turnHead();
+		int measureUltrasoundWithoutTurning();
 		float measurement();
 		float microsecondsToCentimeters(float microseconds);
 		void turnAfterObstacle(int angle);

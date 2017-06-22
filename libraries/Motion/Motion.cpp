@@ -18,7 +18,7 @@ Motion::Motion(int robot) {
 		servoGrabPin = 10; //robot 1:11 robot 2:10
 		normal = 84;
 	}
-	
+
 	degreeRight = normal - deviationNormal;
 	degreeLeft = normal + deviationNormal;
 }
@@ -28,7 +28,7 @@ void Motion::setup() {
 	ultrasoundAngle = degreeRight;
     servoUltrasound.write(ultrasoundAngle);
 	closeGrabber();
-	
+
 }
 
 String Motion::test() {
@@ -41,12 +41,12 @@ int Motion::positionWall(){
 		ultrasoundAngle = 0;
 		servoUltrasound.write(ultrasoundAngle);
 		delay(200);
-		
+
 		m = measurement();
 		if(m > 100) {
 			m = 100;
 		}
-		
+
 		measurementRef = m;
 	} else {
 		servoUltrasound.write(ultrasoundAngle);
@@ -56,21 +56,21 @@ int Motion::positionWall(){
 			m = 100;
 		}
 	}
-	
+
 	firstPositioningWall = false;
 	if(m > measurementRef){
 		return ultrasoundAngle-1;
-		
+
 	}
 	else {
 		measurementRef = m;
 		ultrasoundAngle++;
 		return -1;
 	}
-	
+
 }
 
-int Motion::measureUltrasound() {
+void Motion::turnHead() {
 	if(ultrasoundGoingLeft == 1) {
 		if(ultrasoundAngle < degreeLeft) {
 			ultrasoundAngle++;
@@ -87,28 +87,31 @@ int Motion::measureUltrasound() {
 			ultrasoundAngle++;
 		}
 	}
-
 	servoUltrasound.write(ultrasoundAngle);
 	delay(ultraServoDelay);
-	
+}
 
-
+int Motion::measureUltrasoundWithoutTurning() {
 	// Make something that turns right after detecting on the left and vice versa!!
-	if(measurement()< maxDistance){
+	if(measurement() < maxDistance){
 		return ultrasoundAngle;
 	} else {
 		return -1;
 	}
-	
+}
+
+int Motion::measureUltrasound() {
+	turnHead();
+	return measureUltrasoundWithoutTurning();
 }
 
 
-float Motion::measurement(){  
+float Motion::measurement(){
   // establish variables for duration of the ping,
   // and the distance result in inches and centimeters:
   float duration, cm;
-  
-  
+
+
 
   // The PING))) is triggered by a HIGH pulse of 2 or more microseconds.
   // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
@@ -128,7 +131,7 @@ float Motion::measurement(){
   // convert the time into a distance
 
   return microsecondsToCentimeters(duration);
-  
+
 }
 
 float Motion::microsecondsToCentimeters(float microseconds) {
@@ -139,16 +142,16 @@ float Motion::microsecondsToCentimeters(float microseconds) {
 }
 
 void Motion::turnAfterObstacle(int angle){
-    servoLeft.attach(servoLeftPin);                     
-    servoRight.attach(servoRightPin); 
+    servoLeft.attach(servoLeftPin);
+    servoRight.attach(servoRightPin);
     if (angle > normal ){
-      servoLeft.writeMicroseconds(1700);         
+      servoLeft.writeMicroseconds(1700);
       servoRight.writeMicroseconds(1700);
 	  leftWheelStatus = 1;
 	  rightWheelStatus = -1;
     }
     if (angle <= normal ){
-      servoLeft.writeMicroseconds(1300);         
+      servoLeft.writeMicroseconds(1300);
       servoRight.writeMicroseconds(1300);
 	  leftWheelStatus = -1;
 	  rightWheelStatus = 1;
@@ -158,17 +161,17 @@ void Motion::turnAfterObstacle(int angle){
 }
 
 void Motion::turnLeft() {
-	servoLeft.attach(servoLeftPin);                     
+	servoLeft.attach(servoLeftPin);
     servoRight.attach(servoRightPin);
-	servoLeft.writeMicroseconds(1300);         
+	servoLeft.writeMicroseconds(1300);
     servoRight.writeMicroseconds(1300);
 	leftWheelStatus = -1;
 	rightWheelStatus = 1;
 }
 void Motion::turnLeftCliff() {
-	servoLeft.attach(servoLeftPin);                     
+	servoLeft.attach(servoLeftPin);
     servoRight.attach(servoRightPin);
-	servoLeft.writeMicroseconds(1300);         
+	servoLeft.writeMicroseconds(1300);
     servoRight.writeMicroseconds(1300);
 	delay(500);
 	leftWheelStatus = -1;
@@ -176,17 +179,17 @@ void Motion::turnLeftCliff() {
 }
 
 void Motion::turnRight() {
-	servoLeft.attach(servoLeftPin);                     
+	servoLeft.attach(servoLeftPin);
     servoRight.attach(servoRightPin);
-	servoLeft.writeMicroseconds(1700);         
+	servoLeft.writeMicroseconds(1700);
     servoRight.writeMicroseconds(1700);
 	leftWheelStatus = 1;
 	rightWheelStatus = -1;
 }
 void Motion::turnRightCliff() {
-	servoLeft.attach(servoLeftPin);                     
+	servoLeft.attach(servoLeftPin);
     servoRight.attach(servoRightPin);
-	servoLeft.writeMicroseconds(1700);         
+	servoLeft.writeMicroseconds(1700);
     servoRight.writeMicroseconds(1700);
 	delay(200);
 	leftWheelStatus = 1;
@@ -194,8 +197,8 @@ void Motion::turnRightCliff() {
 }
 
 void Motion::startDriving() {
-	servoLeft.attach(servoLeftPin);                     
-    servoRight.attach(servoRightPin); 
+	servoLeft.attach(servoLeftPin);
+    servoRight.attach(servoRightPin);
     servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
     servoRight.writeMicroseconds(1300);        // Right wheel clockwise
 	leftWheelStatus = 1;
@@ -203,8 +206,8 @@ void Motion::startDriving() {
 }
 
 void Motion::startDrivingBackwards() {
-	servoLeft.attach(servoLeftPin);                     
-    servoRight.attach(servoRightPin); 
+	servoLeft.attach(servoLeftPin);
+    servoRight.attach(servoRightPin);
     servoLeft.writeMicroseconds(1300);         // Left wheel counterclockwise
     servoRight.writeMicroseconds(1700);        // Right wheel clockwise
 	leftWheelStatus = -1;
@@ -213,7 +216,7 @@ void Motion::startDrivingBackwards() {
 
 void Motion::stopDriving(){
     servoLeft.detach();
-    servoRight.detach(); 
+    servoRight.detach();
 	leftWheelStatus = 0;
 	rightWheelStatus = 0;
 }
