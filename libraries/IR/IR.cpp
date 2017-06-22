@@ -162,13 +162,13 @@ float IR::findAngleRockRobot(int rockChannel){
 int IR::alignWithBase(){
 	detectedChannels=0;
 	selectChannel(1);
-	delay(20);
+	delay(100);
 	rockSensorValue=analogRead(sensorPin);
 	if (rockSensorValue>wallThreshold){
         detectedChannels++;
     }
 	selectChannel(8);
-	delay(20);
+	delay(100);
 	rockSensorValue=analogRead(sensorPin);
 	if (rockSensorValue>wallThreshold){
         detectedChannels++;
