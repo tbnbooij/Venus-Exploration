@@ -26,7 +26,7 @@ void loop() {
 
   if (!detectedWall) {
     motion.startDriving();
-    switch (ir.alignWithBase()) {
+    switch (ir.alignWithBase(true)) {
       case 0:
         // Keep driving forward
         Serial.println("Keep driving forward");
@@ -88,7 +88,7 @@ void loop() {
         } else {
           motion.turnLeft();
         }
-        delay(740);
+        delay(740); // 1st
         motion.stopDriving();
         delay(600);
         motion.startDriving();
@@ -100,7 +100,7 @@ void loop() {
         } else {
           motion.turnRight();
         }
-        delay(690);
+        delay(710); // 2nd
         motion.stopDriving();
         delay(600);
         motion.startDriving();
@@ -112,7 +112,7 @@ void loop() {
         } else {
           motion.turnRight();
         }
-        delay(680);
+        delay(715); //3rd
         motion.stopDriving();
         delay(400);
         motion.startDriving();
@@ -122,7 +122,7 @@ void loop() {
         motion.servoUltrasound.write(motion.normal);
         boolean measureLine = false;
         while (true) {
-          int alignBase = ir.alignWithBase();
+          int alignBase = ir.alignWithBase(false);
           if (alignBase == 1) {
             motion.stopDriving();
             delay(50);
@@ -148,7 +148,14 @@ void loop() {
             motion.startDriving();
           }
 
-          measureLine = ir.readRawLineSensor() > 190;
+          Serial.print("rawLine: ");
+          float raw = ir.readRawLineSensor();
+          int line = ir.readLineSensor();
+          Serial.println(raw);
+
+          if(line > 0) {
+            measureLine = true;
+          }
 
           if (!measureLine) {
             continue;
@@ -158,6 +165,11 @@ void loop() {
           Serial.println(dist);
           if (dist <= 20.0f && dist >= 0.0f) {
             Serial.println("STOP Ultrasound");
+            motion.stopDriving();
+            motion.openGrabber();
+            delay(2000);
+            motion.startDrivingBackwards();
+            delay(7000);
             motion.stopDriving();
             break;
           }
