@@ -25,12 +25,13 @@ class IR
 		int rockSensorThresholdValue = 220;
 
 		int detectedChannels = 0;
-		int wallThreshold = 140;
+		int wallThreshold = 170;
+		int rampTreshold = 250;
 
 		float maxRockSensorValue = 900;
 		float minRockSensorValue = 200;
 
-		int threshold = 100;
+		int threshold = 90;
 		int threshold1 = 100;
 	public:
 		IR(int robot);
@@ -39,7 +40,7 @@ class IR
 		void setup();
 		int readLineSensor();
 		float readRawLineSensor();
-		int alignWithBase();
+		int alignWithBase(boolean begin);
 		int readRockSensor();
 };
 

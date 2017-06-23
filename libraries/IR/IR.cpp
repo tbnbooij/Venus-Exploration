@@ -159,35 +159,64 @@ float IR::findAngleRockRobot(int rockChannel){
 	return angleRockRobot;
 }
 
-int IR::alignWithBase(){
+int IR::alignWithBase(boolean begin){
+  int localTreshold = begin ? wallThreshold : rampTreshold;
+
 	detectedChannels=0;
 	selectChannel(1);
 	delay(100);
 	rockSensorValue=analogRead(sensorPin);
-	if (rockSensorValue>wallThreshold){
+  Serial.print("1: ");
+    Serial.println(rockSensorValue);
+	if (rockSensorValue>localTreshold){
         detectedChannels++;
-  } else {
+  } else if(!begin) {
 		selectChannel(2);
 		delay(100);
 		rockSensorValue=analogRead(sensorPin);
-		if (rockSensorValue>wallThreshold){
+    Serial.print("2: ");
+    Serial.println(rockSensorValue);
+		if (rockSensorValue>localTreshold){
 	        detectedChannels++;
-	  }
+	  } else if(!begin) {
+      selectChannel(3);
+      delay(100);
+      rockSensorValue=analogRead(sensorPin);
+      Serial.print("3: ");
+    Serial.println(rockSensorValue);
+      if (rockSensorValue>localTreshold){
+            detectedChannels++;
+      }
+    }
 	}
 	selectChannel(8);
 	delay(100);
 	rockSensorValue=analogRead(sensorPin);
-	if (rockSensorValue>wallThreshold){
+  Serial.print("8: ");
+    Serial.println(rockSensorValue);
+	if (rockSensorValue>localTreshold){
         detectedChannels++;
 				detectedChannels++;
-  } else {
+  } else if(!begin) {
 		selectChannel(7);
 		delay(100);
 		rockSensorValue=analogRead(sensorPin);
-		if (rockSensorValue>wallThreshold){
+    Serial.print("7: ");
+    Serial.println(rockSensorValue);
+		if (rockSensorValue>localTreshold){
 	        detectedChannels++;
 					detectedChannels++;
-	  }
+	  } else if(!begin) {
+      selectChannel(6);
+      delay(100);
+      rockSensorValue=analogRead(sensorPin);
+      Serial.print("6: ");
+    Serial.println(rockSensorValue);
+      if (rockSensorValue>localTreshold){
+            detectedChannels++;
+            detectedChannels++;
+      } 
+    }
 	}
 	return detectedChannels;
 }

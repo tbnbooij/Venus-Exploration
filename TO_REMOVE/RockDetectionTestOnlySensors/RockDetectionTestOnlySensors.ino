@@ -1,7 +1,7 @@
 #include <IR.h>
 #include <Motion.h>
 #include <Encoder.h>
-#include <Math.h>
+#include <math.h>
 
 IR ir(1);
 int tt = 1;
@@ -12,7 +12,7 @@ void setup(){
   Serial.begin(9600);
   }
 void loop(){
-  tt=1;
+  tt=3;
   ir.selectChannel(tt);
   sensorValueMeasured=analogRead(sensorPin);
   
