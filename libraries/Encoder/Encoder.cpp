@@ -1,78 +1,146 @@
 #include "Encoder.h"
 #include "Arduino.h"
-#include "Encoder.h"
+#include "Math.h"
 
-Encoder::Encoder(int pinLeft, int pinRight) {
-	_pinLeft = pinLeft;
-	_pinRight = pinRight;
-
-	pinMode(pinLeft, INPUT);
-	pinMode(pinRight, INPUT);
+Encoder::Encoder(int robot) {
+	if(robot == 1) {
+		
+		angleErrorPercentage = 1.05; // 1.0 would be no error
+	} else {
+		angleErrorPercentage = 1;
+	}
+	
+	pinLeft = 7;
+	pinRight = 8;
+	radius = 0.03435;
+	unitsAxisWidth = 0.1102;
 }
 
-void Encoder::readEncoder(float a[]) {
-	float leftDelta = 0.0;
-	float rightDelta = 0.0;
+void Encoder::setup() {
+	pinMode(pinLeft, INPUT);
+	pinMode(pinRight, INPUT);
+	
+	circumference = M_PI * 2 * radius;
+}
 
-	leftEncoderState = digitalRead(_pinLeft);
+float Encoder::readLeftEncoder(int leftWheelStatus) {
+	float leftDelta = 0.0;
+
+	leftEncoderState = digitalRead(pinLeft);
 	if(leftEncoderState != lastLeftEncoderState) {
+		// LOW for 6.5 out of 11.5, HIGH for 5 out of 11.5
 		if(leftEncoderState == HIGH) {
 			//rising trigger
-			leftDelta = circumference / 8;
+			if(leftWheelStatus == 1) {
+				leftDelta = circumference / 8 * (6.5 / 11.5);
+			}
+			
+			if(leftWheelStatus == -1) {
+				leftDelta = -circumference / 8 * (6.5 / 11.5);
+			}
+		} else {
+			//rising trigger
+			if(leftWheelStatus == 1) {
+				leftDelta = circumference / 8 * (5 / 11.5);
+			}
+			
+			if(leftWheelStatus == -1) {
+				leftDelta = -circumference / 8 * (5 / 11.5);
+			}
 		}
 	}
 	lastLeftEncoderState = leftEncoderState;
 
-	rightEncoderState = digitalRead(_pinRight);
+	return leftDelta;
+}
+
+float Encoder::readRightEncoder(int rightWheelStatus) {
+	float rightDelta = 0.0;
+	
+	rightEncoderState = digitalRead(pinRight);
+	if(rightEncoderState == HIGH) {
+		Serial.println(1);
+	} else {
+		Serial.println(0);
+	}
 	if(rightEncoderState != lastRightEncoderState) {
+		// LOW for 6.5 out of 11.5, HIGH for 5 out of 11.5
 		if(rightEncoderState == HIGH) {
-			//rising trigger
-			rightDelta = circumference / 8;
+			//rising trigger 
+			if(rightWheelStatus == 1) {
+				rightDelta = circumference / 8 * 6.5 / 11.5;
+			}
+			
+			if(rightWheelStatus == -1) {
+				rightDelta = -circumference / 8 * 6.5 / 11.5;
+			}
+		} else {
+			//falling trigger
+			if(rightWheelStatus == 1) {
+				rightDelta = circumference / 8 * 5 / 11.5;
+			}
+			
+			if(rightWheelStatus == -1) {
+				rightDelta = -circumference / 8 * 5 / 11.5;
+			}
 		}
 	}
 	lastRightEncoderState = rightEncoderState;
-
-	a[0] = leftDelta;
-	a[1] = rightDelta;
+	return rightDelta;
 }
 
-void Encoder::updateRelativePosition(float reading[2]) {
-	float leftDelta = reading[0];
-		float rightDelta = reading[1];
+void Encoder::updateRelativePosition(int leftWheelStatus, int rightWheelStatus) {
+	
+	float leftDelta = readLeftEncoder(leftWheelStatus);
+	float rightDelta = readRightEncoder(rightWheelStatus);
+	
+	if(leftDelta == 0 && rightDelta == 0) {
+		return;
+	}
 
-		// leftDelta and rightDelta = distance that the left and right wheel have moved along
-		//  the ground
-		// https://robotics.stackexchange.com/questions/1653/calculate-position-of-differential-drive-robot
-		if (fabs(leftDelta - rightDelta) < 1.0e-6) { // basically going straight
-			x = x + leftDelta * cos(angle);
-			y = y + rightDelta * sin(angle);
-		} else {
-			float R = unitsAxisWidth * (leftDelta + rightDelta) / (2 * (rightDelta - leftDelta));
-			float wd = (rightDelta - leftDelta) / unitsAxisWidth;
-
-			x = x + R * sin(wd + angle) - R * sin(angle);
-			y = y - R * cos(wd + angle) + R * cos(angle);
-			angle = boundAngle(angle + wd);
+	// leftDelta and rightDelta = distance that the left and right wheel have moved along
+	//  the ground
+	// https://robotics.stackexchange.com/questions/1653/calculate-position-of-differential-drive-robot
+	if (leftWheelStatus == 1 && rightWheelStatus == 1) { // Going straight
+		x = x + leftDelta * cos(angle);
+		y = y + rightDelta * sin(angle);
+	} else {
+		// rotating half the unitsAxisWidth with both encoders would be 2*PI
+		float deltaAngle = (( abs(leftDelta) + abs(rightDelta) ) / unitsAxisWidth ) * angleErrorPercentage;
+		
+		if(leftWheelStatus == 1 && rightWheelStatus == -1) {
+			angle -= deltaAngle;
+		} 
+		
+		if(leftWheelStatus == -1 && rightWheelStatus == 1) {
+			angle += deltaAngle;
 		}
+	}
 }
 
-void Encoder::checkDistanceDriven(float xStart, float yStart, float distance) {
+boolean Encoder::checkDistanceDriven(float xStart, float yStart, float distance) {
 	if(distance > 0) { // set when starting driving
-		if( sqrt(pow(x-xStart, 2)+pow(y-yStart,2)) >= distance ) {
-			//stopDriving(); // OR WHATEVER THE FUNCTION IS CALLED IN MOTOR CONTROL
-			distance = 0;
-		}
+		return sqrt(pow(x-xStart, 2)+pow(y-yStart,2)) >= distance;
+	}
+}
+
+boolean Encoder::checkAngleTurned(float begin, float a, boolean increasing) {
+	if(increasing) {
+		return begin + a <= angle;
+	} else {
+		return begin - a >= angle;
 	}
 }
 
 float Encoder::boundAngle(float a) {
-	if(a < 0) {
+	while(a < 0) {
 		a += 2*M_PI;
 	}
 
-	if(a > 2*M_PI) {
+	while(a > 2*M_PI) {
 		a -= 2* M_PI;
 	}
+	
 	return a;
 }
 
@@ -85,5 +153,13 @@ float Encoder::getY() {
 }
 
 float Encoder::getAngle() {
+	return boundAngle(angle);
+}
+
+float Encoder::getRawAngle() {
 	return angle;
+}
+
+String Encoder::test() {
+	return "1";
 }

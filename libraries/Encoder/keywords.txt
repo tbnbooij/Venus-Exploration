@@ -1,0 +1,9 @@
+Encoder	KEYWORD1
+updateRelativePosition	KEYWORD2
+checkDistanceDriven	KEYWORD2
+checkAngleTurned	KEYWORD2
+getX	KEYWORD2
+getY	KEYWORD2
+getAngle	KEYWORD2
+getRawAngle	KEYWORD2
+test	KEYWORD2
