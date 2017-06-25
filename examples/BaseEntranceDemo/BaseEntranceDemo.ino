@@ -36,7 +36,7 @@ void loop() {
         // Move backwards and turn left until alignment completes
         Serial.println("Found rock on left side");
         motion.startDrivingBackwards();
-        delay(300);
+        delay(700);
         motion.stopDriving();
         motion.turnLeft();
         delay(110);
@@ -47,7 +47,7 @@ void loop() {
         // Idem, right hand side
         Serial.println("Found rock on right side");
         motion.startDrivingBackwards();
-        delay(500);
+        delay(700);
         motion.stopDriving();
         motion.turnRight();
         delay(110);

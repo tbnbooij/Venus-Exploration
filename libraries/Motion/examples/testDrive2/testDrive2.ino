@@ -16,7 +16,16 @@ void setup() {
 
 void loop() {
 
-  
+int turnOrNot = motion.measureUltrasound();
+      if (turnOrNot < 0){
+        motion.startDriving();   
+      }
+      else{
+        
+        motion.turnAfterObstacle(turnOrNot);
+        
+        }
+  /*
   int lineDetection = ir.readLineSensor();
     
     
@@ -39,19 +48,11 @@ void loop() {
   else {
     motion.startDriving();
   }
-  /*
-  else{
+  */
   
-      int turnOrNot = motion.measureUltrasound();
-      if (turnOrNot < 0 && lineDetection == 0){
-        motion.startDriving();   
-      }
-      else{
-        
-        motion.turnAfterObstacle(turnOrNot);
-        
-        }
-  }*/
+  
+      
+  //}
   
 
 }
